@@ -20,6 +20,7 @@ branches:
 install:
   - 'bootstrap/bootstrap.sh'
   - 'pipenv install'
+  - 'pipenv shell'
 
 #virtual display for headless run at a 1920x1080 32 bit resolution
 before_script:
