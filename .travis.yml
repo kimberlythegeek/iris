@@ -19,8 +19,6 @@ branches:
 #Bootstrap install /due to a pipenv bug pip is downgraded to a lower version
 install:
   - 'bootstrap/bootstrap.sh'
-#  - 'pip install pip==9.0.3'
-#  - 'pip install pipenv'
   - 'pipenv install'
 
 #virtual display for headless run at a 1920x1080 32 bit resolution
@@ -34,10 +32,10 @@ with_content_shell: true
 #Job sections-At this point we have only one stage with a test folder ,multiple jobs can be added(test suites,etc)
 jobs:
   include:
-    - stage: Ubuntu 16.04 Image search and mouse movement tests
+    - stage: Ubuntu 16.04 basic test
       os: linux
       dist: xenial
-      script: pipenv run iris firefox -j -n -d ci_tests
+      script: pipenv run iris sample -j -n -t test_2
 
 
 # Email notification
