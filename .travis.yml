@@ -37,7 +37,7 @@ jobs:
     - stage: Ubuntu 16.04 basic test
       os: linux
       dist: xenial
-      script: echo 123 > /dev/null
+      script: ls
 #      script: iris -h
 #      script: pipenv run iris sample -j -vk -n -t test_2
 
