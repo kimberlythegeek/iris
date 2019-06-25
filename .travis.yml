@@ -37,7 +37,8 @@ jobs:
       os: linux
       dist: xenial
       script: echo 123 > /dev/null
-#      script: pipenv run iris sample -j -n -t test_2
+#      script: iris -h
+#      script: pipenv run iris sample -j -vk -n -t test_2
 
 
 # Email notification

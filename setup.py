@@ -39,8 +39,8 @@ setup(
     keywords=['mozilla', 'firefox', 'automation', 'regression-testing', 'testing'],
     author='Mozilla',
     author_email='mwobensmith@mozilla.com',
-    url='https://github.com/mozilla/iris2',
-    download_url='https://github.com/mozilla/iris2/latest.tar.gz',
+    url='https://github.com/mozilla/iris',
+    download_url='https://github.com/mozilla/iris/latest.tar.gz',
     license='MPL2',
     packages=find_packages(),
     include_package_data=True,  # See MANIFEST.in
