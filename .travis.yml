@@ -9,14 +9,18 @@ cache:
     - node_modules
 
 before_install:
-  - wget https://github.com/tesseract-ocr/tesseract/archive/4.0.0.tar.gz
+  - 'bootstrap/bootstrap.sh'
+  - 'pipenv install'
 
 install:
   - pip install tox
 
 jobs:
   include:
-    - stage:
+    - stage: lint
       python: 3.7
       before_install: skip
       script: tox -e flake8
+    - stage: test
+      python: 3.7
+      script: tox -e py37
