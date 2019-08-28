@@ -1,0 +1,12 @@
+default_language_version:
+    python: python3
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: ''
+    hooks:
+    -   id: flake8
+        exclude: (tests|targets)
+-   repo: https://github.com/psf/black
+    rev: ''
+    hooks:
+    -   id: black
+        exclude: (tests|targets)

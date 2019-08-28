@@ -1,48 +1,22 @@
-
-dist: xenial
+sudo: required
 language: python
-python: '3.7.3'
+addons:
+  firefox: latest-nightly
 
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - node_modules
 
-# Blocklist
-branches:
-  except:
-  - some_branch_name
+before_install:
+  - wget https://github.com/tesseract-ocr/tesseract/archive/4.0.0.tar.gz
 
-
-# Safelist
-branches:
-  only:
-  - master
-  - dev
-
-# Bootstrap install
 install:
-  - 'bootstrap/bootstrap.sh'
-  - 'pipenv install'
+  - pip install tox
 
-# Virtual display for headless run at 1920x1080 32 bit resolution
-before_script:
-    - "export DISPLAY=:99.0"
-    - "Xvfb :99 -screen 0 1920x1080x24+32 +extension GLX +extension RANDR > /dev/null 2>&1 &"
-    - sleep 3 # give xvfb some time to start
-
-with_content_shell: true
-
-# Job sections
 jobs:
   include:
-    - stage: Ubuntu 16.04 Image search and mouse movement tests
-      os: linux
-      dist: xenial
-      script: pipenv run iris -h
-
-# Email notification
-notifications:
-  email:
-    recipients:
-      - twalker@mozilla.com
-      - mwobensmith@mozilla.com
-    on_success: change
-    on_failure: always
-    on_cancel: always
+    - stage:
+      python: 3.7
+      before_install: skip
+      script: tox -e flake8

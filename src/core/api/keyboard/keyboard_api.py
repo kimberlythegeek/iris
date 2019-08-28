@@ -39,11 +39,11 @@ def paste(text: str):
             attempt += 1
 
     if not text_copied:
-        raise FindError('Paste method failed.')
+        raise FindError("Paste method failed.")
 
     if OSHelper.is_mac():
-        type(text='v', modifier=KeyModifier.CMD)
+        type(text="v", modifier=KeyModifier.CMD)
     else:
-        type(text='v', modifier=KeyModifier.CTRL)
+        type(text="v", modifier=KeyModifier.CTRL)
 
-    pyperclip.copy('')
+    pyperclip.copy("")

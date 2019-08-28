@@ -18,7 +18,9 @@ from src.core.api.settings import Settings
 from src.core.util.arg_parser import get_core_args
 
 
-def highlight(region=None, seconds=None, color=None, ps=None, location=None, text_location=None):
+def highlight(
+    region=None, seconds=None, color=None, ps=None, location=None, text_location=None
+):
     """
     :param region: Screen region to be highlighted.
     :param seconds: How many seconds the region is highlighted. By default the region is highlighted for 2 seconds.
@@ -36,12 +38,17 @@ def highlight(region=None, seconds=None, color=None, ps=None, location=None, tex
 
     hl = ScreenHighlight()
     if region is not None:
-        hl.draw_rectangle(HighlightRectangle(region.x, region.y, region.width, region.height, color))
-        i = hl.canvas.create_text(region.x, region.y,
-                                  anchor='nw',
-                                  text='Region',
-                                  font=("Arial", 12),
-                                  fill=Color.WHITE.value)
+        hl.draw_rectangle(
+            HighlightRectangle(region.x, region.y, region.width, region.height, color)
+        )
+        i = hl.canvas.create_text(
+            region.x,
+            region.y,
+            anchor="nw",
+            text="Region",
+            font=("Arial", 12),
+            fill=Color.WHITE.value,
+        )
 
         r = hl.canvas.create_rectangle(hl.canvas.bbox(i), fill=color, outline=color)
         hl.canvas.tag_lower(r, i)
@@ -50,10 +57,14 @@ def highlight(region=None, seconds=None, color=None, ps=None, location=None, tex
         if isinstance(ps, Pattern):
             width, height = ps.get_size()
             for loc in location:
-                hl.draw_rectangle(HighlightRectangle(loc.x, loc.y, width, height, color))
+                hl.draw_rectangle(
+                    HighlightRectangle(loc.x, loc.y, width, height, color)
+                )
         elif isinstance(ps, str):
             for loc in text_location:
-                hl.draw_rectangle(HighlightRectangle(loc.x, loc.y, loc.width, loc.height, color))
+                hl.draw_rectangle(
+                    HighlightRectangle(loc.x, loc.y, loc.width, loc.height, color)
+                )
 
     hl.render(seconds)
     time.sleep(seconds)
@@ -73,7 +84,7 @@ def find(ps: Pattern or str, region: Rectangle = None) -> Location or FindError:
                 highlight(region=region, ps=ps, location=image_found)
             return image_found[0]
         else:
-            raise FindError('Unable to find image %s' % ps.get_filename())
+            raise FindError("Unable to find image %s" % ps.get_filename())
     elif isinstance(ps, str):
         text_found = text_find(ps, region)
         if len(text_found) > 0:
@@ -81,7 +92,7 @@ def find(ps: Pattern or str, region: Rectangle = None) -> Location or FindError:
                 highlight(region=region, ps=ps, text_location=text_found)
             return Location(text_found[0].x, text_found[0].y)
         else:
-            raise FindError('Unable to find text %s' % ps)
+            raise FindError("Unable to find text %s" % ps)
 
 
 def find_all(ps: Pattern or str, region: Rectangle = None):
@@ -98,7 +109,7 @@ def find_all(ps: Pattern or str, region: Rectangle = None):
                 highlight(region=region, ps=ps, location=images_found)
             return images_found
         else:
-            raise FindError('Unable to find image %s' % ps.get_filename())
+            raise FindError("Unable to find image %s" % ps.get_filename())
     elif isinstance(ps, str):
         locations = []
         text_found = text_find_all(ps, region)
@@ -109,7 +120,7 @@ def find_all(ps: Pattern or str, region: Rectangle = None):
                 locations.append(Location(text.x, text.y))
                 return locations
         else:
-            raise FindError('Unable to find text %s' % ps)
+            raise FindError("Unable to find text %s" % ps)
 
 
 def wait(ps, timeout=None, region=None) -> bool or FindError:
@@ -130,7 +141,7 @@ def wait(ps, timeout=None, region=None) -> bool or FindError:
                 highlight(region=region, ps=ps, location=[image_found])
             return True
         else:
-            raise FindError('Unable to find image %s' % ps.get_filename())
+            raise FindError("Unable to find image %s" % ps.get_filename())
     elif isinstance(ps, str):
         text_found = text_find(ps, region)
         if len(text_found) > 0:
@@ -138,9 +149,9 @@ def wait(ps, timeout=None, region=None) -> bool or FindError:
                 highlight(region=region, ps=ps, text_location=text_found)
             return Location(text_found[0].x, text_found[0].y)
         else:
-            raise FindError('Unable to find text %s' % ps)
+            raise FindError("Unable to find text %s" % ps)
     else:
-        raise ValueError('Invalid input')
+        raise ValueError("Invalid input")
 
 
 def exists(ps: Pattern or str, timeout: float = None, region: Rectangle = None) -> bool:
@@ -162,7 +173,9 @@ def exists(ps: Pattern or str, timeout: float = None, region: Rectangle = None) 
         return False
 
 
-def wait_vanish(pattern: Pattern, timeout: float = None, region: Rectangle = None) -> bool or FindError:
+def wait_vanish(
+    pattern: Pattern, timeout: float = None, region: Rectangle = None
+) -> bool or FindError:
     """Wait until a Pattern disappears.
 
     :param pattern: Pattern.
@@ -179,4 +192,4 @@ def wait_vanish(pattern: Pattern, timeout: float = None, region: Rectangle = Non
     if image_found is not None:
         return True
     else:
-        raise FindError('%s did not vanish' % pattern.get_filename())
+        raise FindError("%s did not vanish" % pattern.get_filename())

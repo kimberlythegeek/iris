@@ -3,7 +3,7 @@
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-from tkinter import *
+from tkinter import Tk, Canvas
 
 from src.core.api.enums import Color
 from src.core.api.highlight.highlight_circle import HighlightCircle
@@ -22,21 +22,24 @@ def _draw_rectangle(canvas, x, y, w, h, **kwargs):
 
 
 class ScreenHighlight(object):
-
     def draw_circle(self, circle: HighlightCircle):
-        return self.canvas.draw_circle(circle.center_x,
-                                       circle.center_y,
-                                       circle.radius,
-                                       outline=circle.color,
-                                       width=circle.thickness)
+        return self.canvas.draw_circle(
+            circle.center_x,
+            circle.center_y,
+            circle.radius,
+            outline=circle.color,
+            width=circle.thickness,
+        )
 
     def draw_rectangle(self, rect: HighlightRectangle):
-        return self.canvas.draw_rectangle(rect.x,
-                                          rect.y,
-                                          rect.width,
-                                          rect.height,
-                                          outline=rect.color,
-                                          width=rect.thickness)
+        return self.canvas.draw_rectangle(
+            rect.x,
+            rect.y,
+            rect.width,
+            rect.height,
+            outline=rect.color,
+            width=rect.thickness,
+        )
 
     def quit(self):
         self.root.quit()
@@ -53,33 +56,35 @@ class ScreenHighlight(object):
     def __init__(self):
         self.root = Tk()
         self.root.overrideredirect(1)
-        s_width = MULTI_MONITOR_AREA['width']
-        s_height = MULTI_MONITOR_AREA['height']
+        s_width = MULTI_MONITOR_AREA["width"]
+        s_height = MULTI_MONITOR_AREA["height"]
 
-        self.root.wm_attributes('-topmost', True)
+        self.root.wm_attributes("-topmost", True)
 
-        canvas = Canvas(self.root,
-                        width=s_width,
-                        height=s_height,
-                        borderwidth=0,
-                        highlightthickness=0,
-                        bg=Color.BLACK.value)
+        canvas = Canvas(
+            self.root,
+            width=s_width,
+            height=s_height,
+            borderwidth=0,
+            highlightthickness=0,
+            bg=Color.BLACK.value,
+        )
         canvas.grid()
 
         Canvas.draw_circle = _draw_circle
         Canvas.draw_rectangle = _draw_rectangle
 
         if OSHelper.is_mac():
-            self.root.wm_attributes('-fullscreen', 1)
-            self.root.wm_attributes('-transparent', True)
-            self.root.config(bg='systemTransparent')
-            canvas.config(bg='systemTransparent')
+            self.root.wm_attributes("-fullscreen", 1)
+            self.root.wm_attributes("-transparent", True)
+            self.root.config(bg="systemTransparent")
+            canvas.config(bg="systemTransparent")
             canvas.pack()
 
         if OSHelper.is_windows():
-            self.root.wm_attributes('-transparentcolor', Color.BLACK.value)
+            self.root.wm_attributes("-transparentcolor", Color.BLACK.value)
 
         if OSHelper.is_linux():
             self.root.wait_visibility(self.root)
-            self.root.attributes('-alpha', 0.7)
+            self.root.attributes("-alpha", 0.7)
         self.canvas = canvas

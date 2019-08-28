@@ -24,33 +24,48 @@ class Screen(Region):
         self.screen_id = screen_id
         self.screen_list = DisplayCollection[screen_id]
         self._bounds = DisplayCollection[screen_id].bounds
-        Region.__init__(self, self._bounds.x, self._bounds.y, self._bounds.width, self._bounds.height)
+        Region.__init__(
+            self,
+            self._bounds.x,
+            self._bounds.y,
+            self._bounds.width,
+            self._bounds.height,
+        )
 
     SCREEN_WIDTH, SCREEN_HEIGHT = pyautogui.size()
     screen_region = Region(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    TOP_HALF = Region.screen_regions(screen_region, 'TOP_HALF')
-    BOTTOM_HALF = Region.screen_regions(screen_region, 'BOTTOM_HALF')
+    TOP_HALF = Region.screen_regions(screen_region, "TOP_HALF")
+    BOTTOM_HALF = Region.screen_regions(screen_region, "BOTTOM_HALF")
 
-    LEFT_HALF = Region.screen_regions(screen_region, 'LEFT_HALF')
-    RIGHT_HALF = Region.screen_regions(screen_region, 'RIGHT_HALF')
+    LEFT_HALF = Region.screen_regions(screen_region, "LEFT_HALF")
+    RIGHT_HALF = Region.screen_regions(screen_region, "RIGHT_HALF")
 
-    TOP_THIRD = Region.screen_regions(screen_region, 'TOP_THIRD')
-    MIDDLE_THIRD_HORIZONTAL = Region.screen_regions(screen_region, 'MIDDLE_THIRD_HORIZONTAL')
-    BOTTOM_THIRD = Region.screen_regions(screen_region, 'BOTTOM_THIRD')
+    TOP_THIRD = Region.screen_regions(screen_region, "TOP_THIRD")
+    MIDDLE_THIRD_HORIZONTAL = Region.screen_regions(
+        screen_region, "MIDDLE_THIRD_HORIZONTAL"
+    )
+    BOTTOM_THIRD = Region.screen_regions(screen_region, "BOTTOM_THIRD")
 
-    LEFT_THIRD = Region.screen_regions(screen_region, 'LEFT_THIRD')
-    MIDDLE_THIRD_VERTICAL = Region.screen_regions(screen_region, 'MIDDLE_THIRD_VERTICAL')
-    RIGHT_THIRD = Region.screen_regions(screen_region, 'RIGHT_THIRD')
+    LEFT_THIRD = Region.screen_regions(screen_region, "LEFT_THIRD")
+    MIDDLE_THIRD_VERTICAL = Region.screen_regions(
+        screen_region, "MIDDLE_THIRD_VERTICAL"
+    )
+    RIGHT_THIRD = Region.screen_regions(screen_region, "RIGHT_THIRD")
 
-    UPPER_LEFT_CORNER = Region.screen_regions(screen_region, 'UPPER_LEFT_CORNER')
-    UPPER_RIGHT_CORNER = Region.screen_regions(screen_region, 'UPPER_RIGHT_CORNER')
-    LOWER_LEFT_CORNER = Region.screen_regions(screen_region, 'LOWER_LEFT_CORNER')
-    LOWER_RIGHT_CORNER = Region.screen_regions(screen_region, 'LOWER_RIGHT_CORNER')
+    UPPER_LEFT_CORNER = Region.screen_regions(screen_region, "UPPER_LEFT_CORNER")
+    UPPER_RIGHT_CORNER = Region.screen_regions(screen_region, "UPPER_RIGHT_CORNER")
+    LOWER_LEFT_CORNER = Region.screen_regions(screen_region, "LOWER_LEFT_CORNER")
+    LOWER_RIGHT_CORNER = Region.screen_regions(screen_region, "LOWER_RIGHT_CORNER")
 
     def __repr__(self):
-        return '%s(x: %r, y: %r, size: %r x %r)' % (self.__class__.__name__, self._bounds.x, self.y, self._bounds.width,
-                                                    self._bounds.height)
+        return "%s(x: %r, y: %r, size: %r x %r)" % (
+            self.__class__.__name__,
+            self._bounds.x,
+            self.y,
+            self._bounds.width,
+            self._bounds.height,
+        )
 
     def get_number_screens(self) -> int:
         """Get the number of screens in a multi-monitor environment at the time the script is running."""

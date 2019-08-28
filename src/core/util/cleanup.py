@@ -13,7 +13,7 @@ __cleanup_done = False
 
 def init():
     """Register cleanup handler."""
-    logger.debug('Registering cleanup handler')
+    logger.debug("Registering cleanup handler")
 
     global __cleanup_done
     __cleanup_done = False
@@ -21,7 +21,7 @@ def init():
     # Will be OS-specific, see https://docs.python.org/2/library/signal.html
     atexit.register(cleanup_handler)
     signal.signal(signal.SIGTERM, cleanup_handler)
-    if sys.platform == 'darwin' or 'linux' in sys.platform:
+    if sys.platform == "darwin" or "linux" in sys.platform:
         # SIGHUP is not available on Windows
         signal.signal(signal.SIGHUP, cleanup_handler)
 
@@ -37,4 +37,5 @@ def cleanup_handler():
 
 class CleanUp(object):
     """When process terminates, .at_exit() is called on every subclass."""
+
     pass

@@ -12,7 +12,7 @@ class Location:
         self.y = y
 
     def __repr__(self):
-        return '%s(%r, %r)' % (self.__class__.__name__, self.x, self.y)
+        return "%s(%r, %r)" % (self.__class__.__name__, self.x, self.y)
 
     def offset(self, away_x: int, away_y: int):
         """Return a location object which is away_x and away_y pixels away horizontally and vertically from the current

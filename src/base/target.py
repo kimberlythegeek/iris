@@ -29,18 +29,35 @@ class BaseTarget:
 
     def __init__(self):
         self.args = self.get_target_args()
-        self.target_name = 'Default target'
+        self.target_name = "Default target"
         self.cc_settings = [
-            {'name': 'locale', 'type': 'list', 'label': 'Locale', 'value': OSHelper.LOCALES, 'default': 'en-US'},
-            {'name': 'mouse', 'type': 'list', 'label': 'Mouse speed', 'value': ['0.0', '0.5', '1.0', '2.0'],
-             'default': '0.5'},
-            {'name': 'highlight', 'type': 'checkbox', 'label': 'Debug using highlighting'},
-            {'name': 'override', 'type': 'checkbox', 'label': 'Run disabled tests'}
+            {
+                "name": "locale",
+                "type": "list",
+                "label": "Locale",
+                "value": OSHelper.LOCALES,
+                "default": "en-US",
+            },
+            {
+                "name": "mouse",
+                "type": "list",
+                "label": "Mouse speed",
+                "value": ["0.0", "0.5", "1.0", "2.0"],
+                "default": "0.5",
+            },
+            {
+                "name": "highlight",
+                "type": "checkbox",
+                "label": "Debug using highlighting",
+            },
+            {"name": "override", "type": "checkbox", "label": "Run disabled tests"},
         ]
         self.clean_run = True
 
     def get_target_args(self):
-        parser = argparse.ArgumentParser(description='Target-specific arguments', prog='iris')
+        parser = argparse.ArgumentParser(
+            description="Target-specific arguments", prog="iris"
+        )
         return parser.parse_known_args()[0]
 
     def update_settings(self, response):
@@ -56,7 +73,7 @@ class BaseTarget:
                 self.set_target_arg(arg, response[arg])
 
     def set_target_arg(self, arg, value):
-        logger.info('Setting %s to %s' % (arg, value))
+        logger.info("Setting %s to %s" % (arg, value))
         arg_dict = vars(self.args)
         arg_dict[arg] = value
         self.args = Namespace(**arg_dict)
@@ -67,19 +84,27 @@ class BaseTarget:
         :param _pytest.main.Session session: the pytest session object.
         """
         self.start_time = time.time()
-        logger.info('\n' + 'Test session {} started'.format(session.name).center(shutil.get_terminal_size().columns, '-'))
+        logger.info(
+            "\n"
+            + "Test session {} started".format(session.name).center(
+                shutil.get_terminal_size().columns, "-"
+            )
+        )
 
         core_settings_list = []
         for arg in vars(core_args):
-            core_settings_list.append('{}: {}'.format(arg, getattr(core_args, arg)))
-        logger.info('\nIris settings:\n' + ', '.join(core_settings_list))
+            core_settings_list.append("{}: {}".format(arg, getattr(core_args, arg)))
+        logger.info("\nIris settings:\n" + ", ".join(core_settings_list))
 
         target_settings_list = []
 
         for arg in vars(self.args):
-            target_settings_list.append('{}: {}'.format(arg, getattr(self.args, arg)))
-        logger.info(('\n{} settings:\n' +
-                     ', '.join(target_settings_list)).format(str(core_args.target).capitalize()))
+            target_settings_list.append("{}: {}".format(arg, getattr(self.args, arg)))
+        logger.info(
+            ("\n{} settings:\n" + ", ".join(target_settings_list)).format(
+                str(core_args.target).capitalize()
+            )
+        )
         update_run_index(self, False)
 
     def pytest_sessionfinish(self, session):
@@ -95,16 +120,23 @@ class BaseTarget:
         result = footer.print_report_footer()
         create_run_log(self)
 
-        logger.info('\n' + 'Test session {} complete'.format(session.name).center(shutil.get_terminal_size().columns, '-'))
+        logger.info(
+            "\n"
+            + "Test session {} complete".format(session.name).center(
+                shutil.get_terminal_size().columns, "-"
+            )
+        )
 
         if core_args.email:
             try:
                 submit_email_report(self, result)
             except SyntaxError:
-                logger.error('Problem with email report - check config file for correct values.')
+                logger.error(
+                    "Problem with email report - check config file for correct values."
+                )
 
     def pytest_runtest_setup(self, item):
-        os.environ['CURRENT_TEST'] = str(item.__dict__.get('fspath'))
+        os.environ["CURRENT_TEST"] = str(item.__dict__.get("fspath"))
 
     def pytest_runtest_teardown(self, item):
         pass
@@ -155,47 +187,52 @@ class BaseTarget:
             tb = call.excinfo.traceback.pop()
 
             # Convert extra backslashes that appear on Windows
-            tb_str = str(tb).replace('\\\\', '\\')
+            tb_str = str(tb).replace("\\\\", "\\")
 
-            if str(item.__dict__.get('fspath')) in tb_str:
-                if 'AssertionError' in str(call.excinfo):
-                    logger.debug('Test failed with assert')
+            if str(item.__dict__.get("fspath")) in tb_str:
+                if "AssertionError" in str(call.excinfo):
+                    logger.debug("Test failed with assert")
                     outcome = "FAILED"
                 else:
-                    logger.debug('Test failed with error')
+                    logger.debug("Test failed with error")
                     outcome = "ERROR"
             else:
-                logger.debug('Test failed with error')
+                logger.debug("Test failed with error")
                 outcome = "ERROR"
 
             # We have found that call.excinfo can be turned to a string, but its
             # format can vary. Therefore, we build an exception string from more
             # predictable values.
 
-            file_name = tb_str.split('\'')[1]
-            line_number = tb_str.split('\':')[1].split(' ')[0]
-            exception_error_class = call.excinfo.exconly(True).split(':')[0]
-            message_only = str(call.excinfo.value).split('\n')[0]
-            exc_str = '%s:%s: %s: %s' % (file_name, line_number, exception_error_class, message_only)
+            file_name = tb_str.split("'")[1]
+            line_number = tb_str.split("':")[1].split(" ")[0]
+            exception_error_class = call.excinfo.exconly(True).split(":")[0]
+            message_only = str(call.excinfo.value).split("\n")[0]
+            exc_str = "%s:%s: %s: %s" % (
+                file_name,
+                line_number,
+                exception_error_class,
+                message_only,
+            )
             assert_object = (item, outcome, exc_str, call.excinfo.traceback)
             test_result = create_result_object(assert_object, call.start, call.stop)
             self.completed_tests.append(test_result)
 
-        elif call.when == 'call' and call.excinfo is None:
-            outcome = 'PASSED'
+        elif call.when == "call" and call.excinfo is None:
+            outcome = "PASSED"
             test_instance = (item, outcome, None)
             test_result = create_result_object(test_instance, call.start, call.stop)
             self.completed_tests.append(test_result)
 
-        elif call.when == 'setup' and item._skipped_by_mark:
-            outcome = 'SKIPPED'
+        elif call.when == "setup" and item._skipped_by_mark:
+            outcome = "SKIPPED"
             test_instance = (item, outcome, None)
             test_result = create_result_object(test_instance, call.start, call.stop)
             self.completed_tests.append(test_result)
 
 
 def reason_for_failure(report):
-    if report.outcome == 'passed':
-        return ''
+    if report.outcome == "passed":
+        return ""
     else:
         return report.longreprtext

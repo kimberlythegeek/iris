@@ -5,7 +5,6 @@
 
 import datetime
 import logging
-import time
 
 import cv2
 import numpy as np
@@ -14,7 +13,7 @@ import numpy as np
 try:
     import Image
 except ImportError:
-    from PIL import Image
+    from PIL import Image  # NOQA
 
 from src.core.api.enums import MatchTemplateType
 from src.core.api.errors import ScreenshotError
@@ -43,16 +42,25 @@ def _is_pattern_size_correct(pattern, region):
     is_correct = True
 
     if p_width > r_width:
-        logger.warning('Pattern Width (%s) greater than Region/Screenshot Width (%s)' % (p_width, r_width))
+        logger.warning(
+            "Pattern Width (%s) greater than Region/Screenshot Width (%s)"
+            % (p_width, r_width)
+        )
         is_correct = False
     if p_height > r_height:
-        logger.warning('Pattern Height (%s) greater than Region/Screenshot Height (%s)' % (p_height, r_height))
+        logger.warning(
+            "Pattern Height (%s) greater than Region/Screenshot Height (%s)"
+            % (p_height, r_height)
+        )
         is_correct = False
     return is_correct
 
 
-def match_template(pattern: Pattern, region: Rectangle = None,
-                   match_type: MatchTemplateType = MatchTemplateType.SINGLE):
+def match_template(
+    pattern: Pattern,
+    region: Rectangle = None,
+    match_type: MatchTemplateType = MatchTemplateType.SINGLE,
+):
     """Find a pattern in a Region or full screen
 
     :param Pattern pattern: Image details
@@ -66,24 +74,33 @@ def match_template(pattern: Pattern, region: Rectangle = None,
     locations_list = []
     save_img_location_list = []
     if not isinstance(match_type, MatchTemplateType):
-        logger.warning('%s should be an instance of `%s`' % (match_type, MatchTemplateType))
+        logger.warning(
+            "%s should be an instance of `%s`" % (match_type, MatchTemplateType)
+        )
         return []
     try:
-        stack_image = ScreenshotImage(region=region, screen_id=_region_in_display_list(region))
+        stack_image = ScreenshotImage(
+            region=region, screen_id=_region_in_display_list(region)
+        )
         precision = pattern.similarity
         if precision == 0.99:
-            logger.debug('Searching image with similarity %s' % precision)
-            res = cv2.matchTemplate(stack_image.get_color_array(), pattern.get_color_array(),FIND_METHOD)
+            logger.debug("Searching image with similarity %s" % precision)
+            res = cv2.matchTemplate(
+                stack_image.get_color_array(), pattern.get_color_array(), FIND_METHOD
+            )
         else:
-            logger.debug('Searching image with similarity %s' % precision)
-            res = cv2.matchTemplate(stack_image.get_gray_array(), pattern.get_gray_array(), FIND_METHOD)
-
+            logger.debug("Searching image with similarity %s" % precision)
+            res = cv2.matchTemplate(
+                stack_image.get_gray_array(), pattern.get_gray_array(), FIND_METHOD
+            )
 
         if match_type is MatchTemplateType.SINGLE:
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-            logger.debug('Min location %s and max location %s' %(min_val,max_val))
+            logger.debug("Min location %s and max location %s" % (min_val, max_val))
             if max_val >= precision:
-                locations_list.append(Location(max_loc[0] + region.x, max_loc[1] + region.y))
+                locations_list.append(
+                    Location(max_loc[0] + region.x, max_loc[1] + region.y)
+                )
                 save_img_location_list.append(Location(max_loc[0], max_loc[1]))
         elif match_type is MatchTemplateType.MULTIPLE:
             loc = np.where(res >= precision)
@@ -96,7 +113,7 @@ def match_template(pattern: Pattern, region: Rectangle = None,
         save_debug_image(pattern, stack_image, save_img_location_list)
 
     except ScreenshotError:
-        logger.warning('Screenshot failed.')
+        logger.warning("Screenshot failed.")
         return []
 
     return locations_list
@@ -114,7 +131,12 @@ def _region_in_display_list(region=None):
         d_w = display.bounds.width
         d_h = display.bounds.height
 
-        if r_x >= d_x and r_x - d_x + r_w <= d_w and r_y >= d_y and r_y - d_y + r_h <= d_h:
+        if (
+            r_x >= d_x
+            and r_x - d_x + r_w <= d_w
+            and r_y >= d_y
+            and r_y - d_y + r_h <= d_h
+        ):
             return index
 
 
@@ -137,7 +159,11 @@ def image_find(pattern, timeout=None, region=None):
 
     while start_time < end_time:
         time_remaining = end_time - start_time
-        logger.debug('Image find: {} - {} seconds remaining'.format(pattern.get_filename(), time_remaining))
+        logger.debug(
+            "Image find: {} - {} seconds remaining".format(
+                pattern.get_filename(), time_remaining
+            )
+        )
         pos = match_template(pattern, region, MatchTemplateType.SINGLE)
         start_time = datetime.datetime.now()
 
@@ -146,7 +172,9 @@ def image_find(pattern, timeout=None, region=None):
     return None
 
 
-def image_vanish(pattern: Pattern, timeout: float = None, region: Rectangle = None) -> None or bool:
+def image_vanish(
+    pattern: Pattern, timeout: float = None, region: Rectangle = None
+) -> None or bool:
     """ Search if an image is NOT in a Region or full screen.
 
     :param Pattern pattern: Name of the searched image.
@@ -164,7 +192,11 @@ def image_vanish(pattern: Pattern, timeout: float = None, region: Rectangle = No
 
     while pattern_found and start_time < end_time:
         time_remaining = end_time - start_time
-        logger.debug('Image vanish: {} - {} seconds remaining'.format(pattern.get_filename(), time_remaining))
+        logger.debug(
+            "Image vanish: {} - {} seconds remaining".format(
+                pattern.get_filename(), time_remaining
+            )
+        )
         image_found = match_template(pattern, region, MatchTemplateType.SINGLE)
         if len(image_found) == 0:
             pattern_found = False

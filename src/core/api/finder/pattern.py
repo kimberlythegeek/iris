@@ -33,7 +33,12 @@ class Pattern:
     associate a specific similarity value, that will be used as the minimum value, when this pattern object is searched.
     """
 
-    def __init__(self, image_name: str, from_path: bool = False, target: str = get_core_args().target):
+    def __init__(
+        self,
+        image_name: str,
+        from_path: bool = False,
+        target: str = get_core_args().target,
+    ):
 
         if from_path is False:
             path = _get_image_path(inspect.stack()[1][1], image_name, target)
@@ -55,11 +60,21 @@ class Pattern:
         self.gray_array = _get_array_from_image(self.gray_image)
 
     def __str__(self):
-        return '(%s, %s, %s, %s)' % (self.image_name, self.image_path, self.scale_factor, self.similarity)
+        return "(%s, %s, %s, %s)" % (
+            self.image_name,
+            self.image_path,
+            self.scale_factor,
+            self.similarity,
+        )
 
     def __repr__(self):
-        return '%s(%r, %r, %r, %r)' % (self.__class__.__name__, self.image_name, self.image_path,
-                                       self.scale_factor, self.similarity)
+        return "%s(%r, %r, %r, %r)" % (
+            self.__class__.__name__,
+            self.image_name,
+            self.image_path,
+            self.scale_factor,
+            self.similarity,
+        )
 
     def target_offset(self, dx: int, dy: int):
         """Add offset to Pattern from top left.
@@ -136,16 +151,18 @@ def _parse_name(full_name: str) -> (str, int):
 
     :return: Pair of image name and scale factor.
     """
-    start_symbol = '@'
-    end_symbol = 'x.'
+    start_symbol = "@"
+    end_symbol = "x."
     if start_symbol not in full_name:
         return full_name, 1
     else:
         try:
             start_index = full_name.index(start_symbol)
             end_index = full_name.index(end_symbol, start_index)
-            scale_factor = float(full_name[start_index + 1:end_index])
-            image_name = full_name[0:start_index] + full_name[end_index + 1:len(full_name)]
+            scale_factor = float(full_name[start_index + 1 : end_index])
+            image_name = (
+                full_name[0:start_index] + full_name[end_index + 1 : len(full_name)]
+            )
             return image_name, scale_factor
         except ValueError:
             logger.warning('Invalid file name format: "%s".' % full_name)
@@ -159,11 +176,17 @@ def _load_all_patterns(target: str) -> list:
     result_list = []
     for root, dirs, files in os.walk(PathManager.get_module_dir()):
         for file_name in files:
-            if file_name.endswith('.png'):
-                if target in root and (PathManager.get_images_path() in root or 'common' in root):
+            if file_name.endswith(".png"):
+                if target in root and (
+                    PathManager.get_images_path() in root or "common" in root
+                ):
                     pattern_name, pattern_scale = _parse_name(file_name)
                     pattern_path = os.path.join(root, file_name)
-                    pattern = {'name': pattern_name, 'path': pattern_path, 'scale': pattern_scale}
+                    pattern = {
+                        "name": pattern_name,
+                        "path": pattern_path,
+                        "scale": pattern_scale,
+                    }
                     result_list.append(pattern)
     return result_list
 
@@ -172,20 +195,31 @@ def _convert_hi_res_images():
     """Function resizes all the project's hi-resolution images."""
     for root, dirs, files in os.walk(PathManager.get_module_dir()):
         for file_name in files:
-            if file_name.endswith('.png'):
-                if 'images' in root or 'local_web' in root:
-                    if '@' in file_name:
-                        logger.debug('Found hi-resolution image at: %s' % os.path.join(root, file_name))
-                        temp = file_name.split('@')
+            if file_name.endswith(".png"):
+                if "images" in root or "local_web" in root:
+                    if "@" in file_name:
+                        logger.debug(
+                            "Found hi-resolution image at: %s"
+                            % os.path.join(root, file_name)
+                        )
+                        temp = file_name.split("@")
                         name = temp[0]
-                        scale = int(temp[1].split('x')[0])
-                        new_name = '%s.png' % name
+                        scale = int(temp[1].split("x")[0])
+                        new_name = "%s.png" % name
                         img = Image.open(os.path.join(root, file_name))
-                        logger.debug('Resizing image from %sx scale' % scale)
-                        new_img = img.resize((img.width / scale, img.height / scale), Image.ANTIALIAS)
-                        logger.debug('Creating newly converted image file at: %s' % os.path.join(root, new_name))
+                        logger.debug("Resizing image from %sx scale" % scale)
+                        new_img = img.resize(
+                            (img.width / scale, img.height / scale), Image.ANTIALIAS
+                        )
+                        logger.debug(
+                            "Creating newly converted image file at: %s"
+                            % os.path.join(root, new_name)
+                        )
                         new_img.save(os.path.join(root, new_name))
-                        logger.debug('Removing unused image at: %s' % os.path.join(root, file_name))
+                        logger.debug(
+                            "Removing unused image at: %s"
+                            % os.path.join(root, file_name)
+                        )
                         os.remove(os.path.join(root, file_name))
 
 
@@ -229,7 +263,7 @@ def _get_gray_image(colored_image: Image) -> Image:
     """Converts colored image to gray image."""
     if colored_image is None:
         return None
-    return colored_image.convert('L')
+    return colored_image.convert("L")
 
 
 def _get_image_path(caller, image: str, target: str) -> str:
@@ -255,26 +289,26 @@ def _get_image_path(caller, image: str, target: str) -> str:
     module = os.path.split(caller)[1]
     module_directory = os.path.split(caller)[0]
     parent_directory = os.path.basename(module_directory)
-    file_name = image.split('.')[0]
-    names = [image, '%s@2x.png' % file_name]
+    file_name = image.split(".")[0]
+    names = [image, "%s@2x.png" % file_name]
 
-    if OSHelper.get_os_version() == 'win7':
-        os_version = 'win7'
+    if OSHelper.get_os_version() == "win7":
+        os_version = "win7"
     else:
         os_version = OSHelper.get_os().value
     paths = []
-    current_locale = ''
+    current_locale = ""
     try:
         current_locale = get_core_args().locale
     except AttributeError:
         pass
 
-    platform_directory = os.path.join(module_directory, 'images', os_version)
+    platform_directory = os.path.join(module_directory, "images", os_version)
     platform_locale_directory = os.path.join(platform_directory, current_locale)
     for name in names:
         paths.append(os.path.join(platform_locale_directory, name))
 
-    common_directory = os.path.join(module_directory, 'images', 'common')
+    common_directory = os.path.join(module_directory, "images", "common")
     common_locale_directory = os.path.join(common_directory, current_locale)
     for name in names:
         paths.append(os.path.join(common_locale_directory, name))
@@ -294,23 +328,30 @@ def _get_image_path(caller, image: str, target: str) -> str:
             break
 
     if found:
-        logger.debug('Module %s requests image %s' % (module, image))
-        logger.debug('Found %s' % image_path)
+        logger.debug("Module %s requests image %s" % (module, image))
+        logger.debug("Found %s" % image_path)
         return image_path
     else:
-        result_list = [x for x in _load_all_patterns(target) if x['name'] == image]
+        result_list = [x for x in _load_all_patterns(target) if x["name"] == image]
         if len(result_list) > 0:
             res = result_list[0]
-            logger.warning('Failed to find image %s in default locations for module %s.' % (image, module))
-            logger.warning('Using this one instead: %s' % res['path'])
-            logger.warning('Please move image to correct location relative to caller.')
-            location_1 = os.path.join(parent_directory, 'images', 'common')
+            logger.warning(
+                "Failed to find image %s in default locations for module %s."
+                % (image, module)
+            )
+            logger.warning("Using this one instead: %s" % res["path"])
+            logger.warning("Please move image to correct location relative to caller.")
+            location_1 = os.path.join(parent_directory, "images", "common")
             location_2 = os.path.join(parent_directory, PathManager.get_images_path())
-            logger.warning('Suggested locations: %s, %s' % (location_1, location_2))
-            return res['path']
+            logger.warning("Suggested locations: %s, %s" % (location_1, location_2))
+            return res["path"]
         else:
-            logger.error('Pattern creation for %s failed for caller %s.' % (image, caller))
-            logger.error('Image not found. Either it is in the wrong platform folder, or it does not exist.')
-            logger.debug('Paths searched:')
-            logger.debug('\n'.join(paths))
-            raise FindError('Pattern not found.')
+            logger.error(
+                "Pattern creation for %s failed for caller %s." % (image, caller)
+            )
+            logger.error(
+                "Image not found. Either it is in the wrong platform folder, or it does not exist."
+            )
+            logger.debug("Paths searched:")
+            logger.debug("\n".join(paths))
+            raise FindError("Pattern not found.")

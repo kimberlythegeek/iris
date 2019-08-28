@@ -57,22 +57,28 @@ class _Settings:
     DEFAULT_UI_DELAY_LONG = 2.5
     DEFAULT_SYSTEM_DELAY = 5
 
-    def __init__(self, wait_scan_rate=DEFAULT_WAIT_SCAN_RATE, type_delay=DEFAULT_TYPE_DELAY,
-                 move_mouse_delay=DEFAULT_MOVE_MOUSE_DELAY, click_delay=DEFAULT_CLICK_DELAY,
-                 min_similarity=DEFAULT_MIN_SIMILARITY, auto_wait_timeout=DEFAULT_AUTO_WAIT_TIMEOUT,
-                 delay_before_mouse_down=DEFAULT_DELAY_BEFORE_MOUSE_DOWN,
-                 delay_before_drag=DEFAULT_DELAY_BEFORE_DRAG,
-                 delay_before_drop=DEFAULT_DELAY_BEFORE_DROP,
-                 slow_motion_delay=DEFAULT_SLOW_MOTION_DELAY,
-                 observe_scan_rate=DEFAULT_OBSERVE_SCAN_RATE,
-                 observe_min_changed_pixels=DEFAULT_OBSERVE_MIN_CHANGED_PIXELS,
-                 system_delay=DEFAULT_SYSTEM_DELAY,
-                 highlight_duration=DEFAULT_HIGHLIGHT_DURATION,
-                 highlight_color=DEFAULT_HIGHLIGHT_COLOR,
-                 highlight_thickness=DEFAULT_HIGHLIGHT_THICKNESS,
-                 mouse_scroll_step=DEFAULT_MOUSE_SCROLL_STEP,
-                 key_shortcut_delay=DEFAULT_KEY_SHORTCUT_DELAY,
-                 site_load_timeout=DEFAULT_SITE_LOAD_TIMEOUT):
+    def __init__(
+        self,
+        wait_scan_rate=DEFAULT_WAIT_SCAN_RATE,
+        type_delay=DEFAULT_TYPE_DELAY,
+        move_mouse_delay=DEFAULT_MOVE_MOUSE_DELAY,
+        click_delay=DEFAULT_CLICK_DELAY,
+        min_similarity=DEFAULT_MIN_SIMILARITY,
+        auto_wait_timeout=DEFAULT_AUTO_WAIT_TIMEOUT,
+        delay_before_mouse_down=DEFAULT_DELAY_BEFORE_MOUSE_DOWN,
+        delay_before_drag=DEFAULT_DELAY_BEFORE_DRAG,
+        delay_before_drop=DEFAULT_DELAY_BEFORE_DROP,
+        slow_motion_delay=DEFAULT_SLOW_MOTION_DELAY,
+        observe_scan_rate=DEFAULT_OBSERVE_SCAN_RATE,
+        observe_min_changed_pixels=DEFAULT_OBSERVE_MIN_CHANGED_PIXELS,
+        system_delay=DEFAULT_SYSTEM_DELAY,
+        highlight_duration=DEFAULT_HIGHLIGHT_DURATION,
+        highlight_color=DEFAULT_HIGHLIGHT_COLOR,
+        highlight_thickness=DEFAULT_HIGHLIGHT_THICKNESS,
+        mouse_scroll_step=DEFAULT_MOUSE_SCROLL_STEP,
+        key_shortcut_delay=DEFAULT_KEY_SHORTCUT_DELAY,
+        site_load_timeout=DEFAULT_SITE_LOAD_TIMEOUT,
+    ):
 
         self.wait_scan_rate = wait_scan_rate
         self._type_delay = type_delay

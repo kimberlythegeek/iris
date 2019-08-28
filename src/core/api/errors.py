@@ -5,6 +5,7 @@
 
 class FindError(Exception):
     """Exception raised when a Location, Pattern, image or text is not found."""
+
     def __init__(self, message):
         """Create an exception instance."""
         Exception.__init__(self, message)
@@ -12,6 +13,7 @@ class FindError(Exception):
 
 class ConfigError(Exception):
     """Exception raised if there is unexpected behavior when manipulating config files."""
+
     def __init__(self, message):
         """Create an exception instance."""
         Exception.__init__(self, message)
@@ -19,6 +21,7 @@ class ConfigError(Exception):
 
 class APIHelperError(Exception):
     """Exception raised when an API helper returns an error."""
+
     def __init__(self, message):
         """Create an exception instance."""
         Exception.__init__(self, message)
@@ -26,6 +29,7 @@ class APIHelperError(Exception):
 
 class EmailError(Exception):
     """Exception raised when an email error occurs."""
+
     def __init__(self, message):
         """Create an exception instance."""
         Exception.__init__(self, message)
@@ -33,6 +37,7 @@ class EmailError(Exception):
 
 class ScreenshotError(Exception):
     """Exception raised when an screenshot error occurs."""
+
     def __init__(self, message):
         """Create an exception instance."""
         Exception.__init__(self, message)

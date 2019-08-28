@@ -11,7 +11,6 @@ import pyperclip
 
 from src.core.api.keyboard.key import Key
 from src.core.api.os_helpers import OSHelper
-from src.core.util.arg_parser import logger
 from src.core.util.system import shutdown_process
 
 logger = logging.getLogger(__name__)
@@ -42,33 +41,33 @@ def is_lock_on(key):
         try:
             key_state = hll_dll.GetKeyState(keyboard_code) & 1
         except Exception:
-            raise Exception('Unable to run Command.')
+            raise Exception("Unable to run Command.")
         if key_state == 1:
             return True
         return False
 
     elif OSHelper.is_linux() or OSHelper.is_mac():
         try:
-            cmd = subprocess.Popen('xset q', shell=True, stdout=subprocess.PIPE)
-            shutdown_process('Xquartz')
+            cmd = subprocess.Popen("xset q", shell=True, stdout=subprocess.PIPE)
+            shutdown_process("Xquartz")
         except subprocess.CalledProcessError as e:
-            logger.error('Command  failed: %s' % repr(e.cmd))
-            raise Exception('Unable to run Command.')
+            logger.error("Command  failed: %s" % repr(e.cmd))
+            raise Exception("Unable to run Command.")
         else:
             processed_lock_key = key.value.label
-            if 'caps' in processed_lock_key:
-                processed_lock_key = 'Caps'
-            elif 'num' in processed_lock_key:
-                processed_lock_key = 'Num'
-            elif 'scroll' in processed_lock_key:
-                processed_lock_key = 'Scroll'
+            if "caps" in processed_lock_key:
+                processed_lock_key = "Caps"
+            elif "num" in processed_lock_key:
+                processed_lock_key = "Num"
+            elif "scroll" in processed_lock_key:
+                processed_lock_key = "Scroll"
 
             for line in cmd.stdout:
                 line = line.decode("utf-8")
                 if processed_lock_key in line:
-                    values = re.findall('\d*\D+', ' '.join(line.split()))
+                    values = re.findall(r"\d*\D+", " ".join(line.split()))
                     for val in values:
-                        if processed_lock_key in val and 'off' in val:
+                        if processed_lock_key in val and "off" in val:
                             return False
         return True
 
@@ -85,7 +84,10 @@ def check_keyboard_state(disable=False):
     keyboard_keys = [Key.CAPS_LOCK, Key.NUM_LOCK, Key.SCROLL_LOCK]
     for key in keyboard_keys:
         if is_lock_on(key):
-            logger.error('Cannot run Iris because %s is on. Please turn it off to continue.' % key.value.label.upper())
+            logger.error(
+                "Cannot run Iris because %s is on. Please turn it off to continue."
+                % key.value.label.upper()
+            )
             key_on = True
     return not key_on
 
@@ -96,9 +98,7 @@ def get_active_modifiers(key):
     :param key: Key modifier.
     :return: Returns an array with all the active modifiers.
     """
-    all_modifiers = [
-        Key.SHIFT,
-        Key.CTRL]
+    all_modifiers = [Key.SHIFT, Key.CTRL]
     if OSHelper.is_mac():
         all_modifiers.append(Key.CMD)
     elif OSHelper.is_windows():

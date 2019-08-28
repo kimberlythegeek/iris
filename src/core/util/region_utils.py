@@ -14,9 +14,10 @@ logger = logging.getLogger(__name__)
 
 
 class RegionUtils:
-
     @staticmethod
-    def generate_region_by_markers(top_left_marker_img=None, bottom_right_marker_img=None):
+    def generate_region_by_markers(
+        top_left_marker_img=None, bottom_right_marker_img=None
+    ):
         """Generate a region starting from 2 markers.
 
         :param top_left_marker_img: Top left pattern used to generate the region.
@@ -27,21 +28,31 @@ class RegionUtils:
             wait(top_left_marker_img, 10)
             exists(bottom_right_marker_img, 10)
         except FindError:
-            raise FindError('Unable to find page markers.')
+            raise FindError("Unable to find page markers.")
 
         top_left_pos = find(top_left_marker_img)
         bottom_right_pos = find(bottom_right_marker_img)
 
         marker_width, marker_height = bottom_right_marker_img.get_size()
 
-        return Region(top_left_pos.x,
-                      top_left_pos.y,
-                      (bottom_right_pos.x + marker_width),
-                      bottom_right_pos.y - top_left_pos.y + marker_height)
+        return Region(
+            top_left_pos.x,
+            top_left_pos.y,
+            (bottom_right_pos.x + marker_width),
+            bottom_right_pos.y - top_left_pos.y + marker_height,
+        )
 
     @staticmethod
-    def create_region_from_patterns(top=None, bottom=None, left=None, right=None, padding_top=None, padding_bottom=None,
-                                    padding_left=None, padding_right=None):
+    def create_region_from_patterns(
+        top=None,
+        bottom=None,
+        left=None,
+        right=None,
+        padding_top=None,
+        padding_bottom=None,
+        padding_left=None,
+        padding_right=None,
+    ):
         """Returns a region created from combined area of one or more patterns. Argument names are just for convenience
         and don't influence outcome.
 
@@ -67,9 +78,9 @@ class RegionUtils:
             patterns.append(right)
 
         if len(patterns) == 0:
-            raise ValueError('One or more patterns required.')
+            raise ValueError("One or more patterns required.")
 
-        logger.debug('Creating region from %s pattern(s).' % len(patterns))
+        logger.debug("Creating region from %s pattern(s)." % len(patterns))
 
         a, b = (Screen().width, Screen().height)
         p1 = Location(a, b)
@@ -90,12 +101,12 @@ class RegionUtils:
                 if current_pattern.y + h > p2.y:
                     p2.y = current_pattern.y + h
             else:
-                raise FindError('Pattern not found: %s ' % pattern)
+                raise FindError("Pattern not found: %s " % pattern)
 
         found_region = Region(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y)
 
         if padding_top or padding_bottom or padding_left or padding_right:
-            logger.debug('Adding padding to region.')
+            logger.debug("Adding padding to region.")
 
         if padding_top:
             found_region.y -= padding_top

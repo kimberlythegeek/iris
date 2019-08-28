@@ -19,8 +19,13 @@ class Display:
         self.scale = _get_scale(screen_id)
 
     def __repr__(self):
-        return '%s(%r, %r, %r, %r)' % (self.__class__.__name__, self.bounds.x, self.bounds.y, self.bounds.width,
-                                       self.bounds.height)
+        return "%s(%r, %r, %r, %r)" % (
+            self.__class__.__name__,
+            self.bounds.x,
+            self.bounds.y,
+            self.bounds.width,
+            self.bounds.height,
+        )
 
 
 def _get_screen_details(screen_id: int) -> Rectangle:
@@ -30,14 +35,18 @@ def _get_screen_details(screen_id: int) -> Rectangle:
     :return: Region object.
     """
     if len(MONITORS) == 0:
-        logger.error('Could not retrieve list of available monitors.')
+        logger.error("Could not retrieve list of available monitors.")
     else:
         try:
             details = MONITORS[screen_id]
-            return Rectangle(details['left'], details['top'], details['width'], details['height'])
+            return Rectangle(
+                details["left"], details["top"], details["width"], details["height"]
+            )
         except IndexError:
-            logger.warning('Screen %s does not exist. Available monitors: %s'
-                           % (screen_id, ', '.join(_get_available_monitors(MONITORS))))
+            logger.warning(
+                "Screen %s does not exist. Available monitors: %s"
+                % (screen_id, ", ".join(_get_available_monitors(MONITORS)))
+            )
     return Rectangle()
 
 
@@ -45,7 +54,7 @@ def _get_available_monitors(screen_list):
     """Return a list with all the available monitors."""
     res = []
     for screen in screen_list:
-        res.append('Screen(%s)' % screen_list.index(screen))
+        res.append("Screen(%s)" % screen_list.index(screen))
     return res
 
 
@@ -59,7 +68,7 @@ def _get_display_collection():
 def _get_scale(screen_id):
     try:
         display = MONITORS[screen_id]
-        display_width = display['width']
+        display_width = display["width"]
         screenshot = mss.mss().grab(display)
         return screenshot.width / display_width
     except IndexError:
