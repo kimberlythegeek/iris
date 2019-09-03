@@ -15,6 +15,7 @@ branches:
   only:
   - master
   - dev
+  - travis
 
 # Bootstrap install
 install:
@@ -35,7 +36,7 @@ jobs:
     - stage: Ubuntu 16.04 Image search and mouse movement tests
       os: linux
       dist: xenial
-      script: pipenv run iris firefox -n
+      script: pipenv run iris -h
 
 # Email notification
 notifications:
