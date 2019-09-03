@@ -33,12 +33,14 @@ class EmailClient:
 
     @staticmethod
     def create_email_subject(target):
-        email_info = "[%s][%s]Iris Test Report %s" % (
-            target.target_name + " " + str(target.values["fx_version"])
+        os_version = OSHelper.get_os_version().capitalize()
+        date_today = date.today()
+        email_info = "[{}][{}]Iris Test Report {}".format(
+            "{} {}".format(target.target_name, target.values["fx_version"])
             if target.target_name == "Firefox"
             else target.target_name,
-            OSHelper.get_os_version().capitalize(),
-            date.today(),
+            os_version,
+            date_today,
         )
         return email_info
 
@@ -58,23 +60,24 @@ class EmailClient:
             )
             return attachment
         else:
-            raise Exception("File %s is not present in path" % test_report_file)
+            raise Exception("File {} is not present in path".format(test_report_file))
 
     def send_email_report(self, target: str, test_status: str, repo_details: str):
         email = MIMEMultipart()
         body_message = ""
         if isinstance(repo_details, dict):
             body_message = MIMEText(
-                """ Repo_details:\n """
-                + """Branch_name:"""
-                + repo_details.get("iris_branch")
-                + " \n "
-                + """Branch_head: """
-                + repo_details.get("iris_branch_head")
-                + "\n\n"
-                + """Test_Run_Details: """
-                + test_status
-                + """ \nNote: To see the complete run output, please check the attachment."""
+                (
+                    " Repo_details:\n"
+                    " Branch_name: {}\n"
+                    " Branch_head: {}\n"
+                    " Test_Run_Details: {}\n"
+                    " Note: To see the complete run output, please check the attachment.".format(
+                        repo_details.get("iris_branch"),
+                        repo_details.get("iris_branch_head"),
+                        test_status,
+                    )
+                )
             )
         else:
             raise EmailError("Invalid Body Message")
@@ -106,7 +109,7 @@ class EmailClient:
                 )
             else:
                 server.quit()
-                logger.info("Email successfully sent to %s" % self.targets)
+                logger.info("Email successfully sent to {}".format(self.targets))
 
 
 def submit_email_report(target, result):
