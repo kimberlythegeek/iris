@@ -15,6 +15,7 @@ branches:
   only:
   - master
   - dev
+  - travis
 
 # Bootstrap install
 install:
