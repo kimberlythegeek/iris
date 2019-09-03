@@ -9,7 +9,7 @@ cache:
     - node_modules
 
 before_install:
-  - 'bootstrap/bootstrap.sh'
+  - 'iris/bootstrap/bootstrap.sh'
   - 'pipenv install'
 
 install:
