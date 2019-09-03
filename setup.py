@@ -40,12 +40,12 @@ setup(
     download_url="https://github.com/mozilla/iris2/latest.tar.gz",
     license="MPL2",
     packages=find_packages(),
-    package_data={"": ["*.png"]},
+    package_data={"": ["*.png", "config.ini"]},
     include_package_data=True,  # See MANIFEST.in
     zip_safe=False,
     use_2to3=False,
     install_requires=INSTALL_REQUIRES,
     tests_require=TESTS_REQUIRE,
     extras_require={"dev": DEV_REQUIRES},  # For `pip install -e .[dev]`
-    entry_points={"console_scripts": ["iris = src.__main__:main"]},
+    entry_points={"console_scripts": ["iris = iris.src.__main__:main"]},
 )
