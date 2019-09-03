@@ -16,21 +16,22 @@ final_result = None
 
 class CustomHandler(BaseHTTPRequestHandler):
 
-    CONTENT_TYPES = {'css': 'text/css',
-                     'htm': 'text/html',
-                     'html': 'text/html',
-                     'ico': 'image/x-icon',
-                     'jpeg': 'image/jpeg',
-                     'jpg': 'image/jpeg',
-                     'js': 'text/javascript',
-                     'json': 'application/json',
-                     'log': 'text/plain',
-                     'pdf': 'application/pdf',
-                     'png': 'image/png',
-                     'woff': 'font/woff',
-                     'woff2': 'font/woff2',
-                     'zip': 'application/zip'
-                    }
+    CONTENT_TYPES = {
+        'css': 'text/css',
+        'htm': 'text/html',
+        'html': 'text/html',
+        'ico': 'image/x-icon',
+        'jpeg': 'image/jpeg',
+        'jpg': 'image/jpeg',
+        'js': 'text/javascript',
+        'json': 'application/json',
+        'log': 'text/plain',
+        'pdf': 'application/pdf',
+        'png': 'image/png',
+        'woff': 'font/woff',
+        'woff2': 'font/woff2',
+        'zip': 'application/zip'
+    }
 
     def stop_server(self):
         logger.debug('Handler stop_server')
@@ -86,7 +87,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 self.wfile.write(f.read())
         except Exception as e:
             logger.debug('Exception in do_GET')
-            logger.debug (e.args)
+            logger.debug(e.args)
             if '10053' in e.args:
                 logger.debug('Browser closed connection before response completed.')
 

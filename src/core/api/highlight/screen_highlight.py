@@ -3,7 +3,7 @@
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-from tkinter import *
+from tkinter import Tk, Canvas
 
 from src.core.api.enums import Color
 from src.core.api.highlight.highlight_circle import HighlightCircle

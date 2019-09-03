@@ -22,7 +22,7 @@ from src.core.api.keyboard.keyboard import type
 from src.core.api.keyboard.keyboard_util import check_keyboard_state
 from src.core.api.os_helpers import OSHelper
 from src.core.api.settings import Settings
-from src.core.util.cleanup import *
+from src.core.util.cleanup import init, CleanUp
 from src.core.util.target_loader import collect_tests
 from src.core.util.arg_parser import get_core_args, set_core_arg
 from src.core.util.json_utils import create_target_json
@@ -46,9 +46,9 @@ def main():
             init_control_center()
             user_result = launch_control_center()
             logger.debug(user_result)
-            if user_result is not 'cancel':
+            if user_result != 'cancel':
                 # Extract list of tests
-                if not 'tests' in user_result:
+                if 'tests' not in user_result:
                     exit_iris('No tests chosen, closing Iris.', status=0)
 
                 pytest_args = user_result['tests']

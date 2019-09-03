@@ -98,7 +98,7 @@ def delete_all():
         data.close()
 
     for run in run_file_data['runs']:
-            delete(run['id'])
+        delete(run['id'])
 
 
 def go(request):

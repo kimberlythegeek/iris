@@ -5,16 +5,9 @@
 
 import datetime
 import logging
-import time
 
 import cv2
 import numpy as np
-
-
-try:
-    import Image
-except ImportError:
-    from PIL import Image
 
 from src.core.api.enums import MatchTemplateType
 from src.core.api.errors import ScreenshotError
@@ -73,15 +66,14 @@ def match_template(pattern: Pattern, region: Rectangle = None,
         precision = pattern.similarity
         if precision == 0.99:
             logger.debug('Searching image with similarity %s' % precision)
-            res = cv2.matchTemplate(stack_image.get_color_array(), pattern.get_color_array(),FIND_METHOD)
+            res = cv2.matchTemplate(stack_image.get_color_array(), pattern.get_color_array(), FIND_METHOD)
         else:
             logger.debug('Searching image with similarity %s' % precision)
             res = cv2.matchTemplate(stack_image.get_gray_array(), pattern.get_gray_array(), FIND_METHOD)
 
-
         if match_type is MatchTemplateType.SINGLE:
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-            logger.debug('Min location %s and max location %s' %(min_val,max_val))
+            logger.debug('Min location %s and max location %s' % (min_val, max_val))
             if max_val >= precision:
                 locations_list.append(Location(max_loc[0] + region.x, max_loc[1] + region.y))
                 save_img_location_list.append(Location(max_loc[0], max_loc[1]))

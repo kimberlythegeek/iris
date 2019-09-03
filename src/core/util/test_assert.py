@@ -9,8 +9,20 @@ logger = logging.getLogger(__name__)
 
 
 class TestResult(object):
-
-    def __init__(self, item, node_name, outcome, message, actual, expected, file_name, error, line, traceback, test_duration):
+    def __init__(
+        self,
+        item,
+        node_name,
+        outcome,
+        message,
+        actual,
+        expected,
+        file_name,
+        error,
+        line,
+        traceback,
+        test_duration,
+    ):
         self.item = item
         self.node_name = node_name
         self.outcome = outcome
@@ -37,13 +49,15 @@ def create_result_object(assert_instance: tuple, start_time, end_time):
     if outcome == 'FAILED' or outcome == 'ERROR':
         assert_object = assert_instance.__getitem__(2)
         assert_info = normalize_assert(assert_object)
-        result = TestResult(assert_instance.__getitem__(0), assert_info.get('node_name'), assert_instance.__getitem__(1),
-                            assert_info.get('message'), assert_info.get('actual'), assert_info.get('expected'),
-                            str(assert_instance.__getitem__(0).__dict__.get('fspath')),
-                            assert_info.get('error'), assert_info.get('line'),
-                            '\n  '.join(map(str, ['Traceback (most recent call last):'] + assert_instance.__getitem__(3)
-                                            + ['%s: %s' % (assert_info.get('error'), assert_info.get('message'))])),
-                            end_time - start_time)
+        result = TestResult(
+            assert_instance.__getitem__(0), assert_info.get('node_name'), assert_instance.__getitem__(1),
+            assert_info.get('message'), assert_info.get('actual'), assert_info.get('expected'),
+            str(assert_instance.__getitem__(0).__dict__.get('fspath')),
+            assert_info.get('error'), assert_info.get('line'),
+            '\n  '.join(map(str, ['Traceback (most recent call last):'] + assert_instance.__getitem__(3)
+                            + ['%s: %s' % (assert_info.get('error'), assert_info.get('message'))])),
+            end_time - start_time
+        )
     elif outcome == 'PASSED':
         test_item = assert_instance.__getitem__(0).__dict__
         result = TestResult(assert_instance.__getitem__(0), test_item.get('fspath'),

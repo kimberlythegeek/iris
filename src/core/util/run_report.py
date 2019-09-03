@@ -50,9 +50,10 @@ class ReportFooter:
         total_time_seconds = self.total_duration - (total_time_hours * 3600) - (total_time_minutes * 60)
         total_time_str = 'Total time: %02d:%02d:%06.3f' % (total_time_hours, total_time_minutes, total_time_seconds)
 
-        test_results = (header + app_details + '\n' + test_results_str + ' ' *
-                        (shutil.get_terminal_size().columns - (len(test_results_str) + len(total_time_str))) +
-                        total_time_str + failure_str + separator)
+        test_results = (header + app_details + '\n' + test_results_str + ' '
+                        * (shutil.get_terminal_size().columns
+                            - (len(test_results_str) + len(total_time_str)))
+                        + total_time_str + failure_str + separator)
 
         logger.info(test_results)
         return test_results

@@ -36,8 +36,13 @@ class EmailClient:
     def create_email_subject(target):
         os_version = OSHelper.get_os_version().capitalize()
         date_today = date.today()
-        email_info = '[{}][{}]Iris Test Report {}'.format('{} {}'.format(target.target_name, target.values['fx_version']) if target.target_name == 'Firefox' 
-            else target.target_name, os_version, date_today)
+        email_info = '[{}][{}]Iris Test Report {}'.format(
+            '{} {}'.format(target.target_name, target.values['fx_version'])
+            if target.target_name == 'Firefox'
+            else target.target_name,
+            os_version,
+            date_today,
+        )
         return email_info
 
     @staticmethod
@@ -63,13 +68,12 @@ class EmailClient:
                 ' Branch_head: {}\n'
                 ' Test_Run_Details: {}\n'
                 ' Note: To see the complete run output, please check the attachment.'.format(
-                    repo_details.get('iris_branch'), 
-                    repo_details.get('iris_branch_head'), 
+                    repo_details.get('iris_branch'),
+                    repo_details.get('iris_branch_head'),
                     test_status)
-                )) 
+            ))
         else:
             raise EmailError("Invalid Body Message")
-
 
         email.attach(body_message)
         attachment = self.get_file_attachment()
@@ -103,6 +107,9 @@ def submit_email_report(target, result):
         :param test_results: TEST RESULT SESSION
         need to update with appliications and git object
     """
-    logger.info(' --------------------------------------------------------- '+Color.BLUE+'Starting Email report:'+Color.END+' ----------------------------------------------------------\n')
+    logger.info(' --------------------------------------------------------- '
+                + Color.BLUE + 'Starting Email report:' + Color.END
+                + ' ----------------------------------------------------------\n'
+                )
     email_report = EmailClient()
     email_report.send_email_report(target, str(result), PathManager.get_git_details())

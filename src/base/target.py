@@ -67,7 +67,7 @@ class BaseTarget:
         :param _pytest.main.Session session: the pytest session object.
         """
         self.start_time = time.time()
-        logger.info('\n' + 'Test session {} started'.format(session.name).center(shutil.get_terminal_size().columns, '-'))
+        logger.info('\nTest session {} started'.format(session.name).center(shutil.get_terminal_size().columns, '-'))
 
         core_settings_list = []
         for arg in vars(core_args):
@@ -78,8 +78,9 @@ class BaseTarget:
 
         for arg in vars(self.args):
             target_settings_list.append('{}: {}'.format(arg, getattr(self.args, arg)))
-        logger.info(('\n{} settings:\n' +
-                     ', '.join(target_settings_list)).format(str(core_args.target).capitalize()))
+        logger.info(
+            ('\n{} settings:\n, '.join(target_settings_list)).format(str(core_args.target).capitalize())
+        )
         update_run_index(self, False)
 
     def pytest_sessionfinish(self, session):
@@ -95,7 +96,7 @@ class BaseTarget:
         result = footer.print_report_footer()
         create_run_log(self)
 
-        logger.info('\n' + 'Test session {} complete'.format(session.name).center(shutil.get_terminal_size().columns, '-'))
+        logger.info('\nTest session {} complete'.format(session.name).center(shutil.get_terminal_size().columns, '-'))
 
         if core_args.email:
             try:

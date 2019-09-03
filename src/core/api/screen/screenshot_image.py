@@ -44,27 +44,25 @@ class ScreenshotImage:
         self._gray_array = _convert_image_to_gray(self._raw_image)
         self._color_array = _convert_image_to_color(self._raw_image)
 
-
         height, width = self._gray_array.shape
         self.width = width
         self.height = height
-
-
-
-
 
         scale = DisplayCollection[screen_id].scale
 
         if scale != 1:
             self.width = int(width / scale)
             self.height = int(height / scale)
-            self._color_array = cv2.resize(self._color_array,
-                                          dsize=(self.width, self.height),
-                                          interpolation=cv2.INTER_CUBIC)
-            self._gray_array = cv2.resize(self._gray_array,
-                                          dsize=(self.width, self.height),
-                                          interpolation=cv2.INTER_CUBIC)
-
+            self._color_array = cv2.resize(
+                self._color_array,
+                dsize=(self.width, self.height),
+                interpolation=cv2.INTER_CUBIC
+            )
+            self._gray_array = cv2.resize(
+                self._gray_array,
+                dsize=(self.width, self.height),
+                interpolation=cv2.INTER_CUBIC
+            )
 
     def get_gray_array(self):
         """Getter for the gray_array property."""
@@ -94,7 +92,6 @@ class ScreenshotImage:
         debugging purposes."""
         image = self.get_raw_image()
         return image.show()
-
 
 
 def _region_to_image(region) -> Image or ScreenshotError:

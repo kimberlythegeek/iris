@@ -199,7 +199,9 @@ def convert_test_list(test_list, only_failures=False):
             else:
                 if test_failed:
                     test_assert = {
-                        'error': test.error.lstrip(), 'message': test.message.lstrip(), 'call_stack': test.traceback + '\n\n ',
+                        'error': test.error.lstrip(),
+                        'message': test.message.lstrip(),
+                        'call_stack': test.traceback + '\n\n ',
                         'code': get_failing_code(test.node_name, int(test.line))
                     }
                     test_obj['assert'] = test_assert
@@ -304,6 +306,7 @@ def scan_all_tests(target):
                 parent = tests
     return tests
 
+
 def use_cached_target_file():
     """
     Helper function to determine if target.json is relatively recent and can be re-used.
@@ -324,6 +327,7 @@ def use_cached_target_file():
         if elapsed_time < cache_time:
             result = True
     return result
+
 
 class TestCollector:
 

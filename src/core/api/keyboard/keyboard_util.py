@@ -2,7 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 import ctypes
-import logging
 import re
 import subprocess
 
@@ -14,7 +13,6 @@ from src.core.api.os_helpers import OSHelper
 from src.core.util.arg_parser import logger
 from src.core.util.system import shutdown_process
 
-logger = logging.getLogger(__name__)
 DEFAULT_KEY_SHORTCUT_DELAY = 0.1
 pyautogui.FAILSAFE = False
 
@@ -66,7 +64,7 @@ def is_lock_on(key):
             for line in cmd.stdout:
                 line = line.decode("utf-8")
                 if processed_lock_key in line:
-                    values = re.findall('\d*\D+', ' '.join(line.split()))
+                    values = re.findall(r'\d*\D+', ' '.join(line.split()))
                     for val in values:
                         if processed_lock_key in val and 'off' in val:
                             return False
