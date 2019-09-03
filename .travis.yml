@@ -39,11 +39,11 @@ jobs:
       script: pipenv run iris firefox -n
 
 # Email notification
-notifications:
-  email:
-    recipients:
-      - twalker@mozilla.com
-      - mwobensmith@mozilla.com
-    on_success: change
-    on_failure: always
-    on_cancel: always
+# notifications:
+#   email:
+#     recipients:
+#       - twalker@mozilla.com
+#       - mwobensmith@mozilla.com
+#     on_success: change
+#     on_failure: always
+#     on_cancel: always
