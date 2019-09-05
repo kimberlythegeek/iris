@@ -3,7 +3,7 @@
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-from src.base.target import *
+from moziris.base.target import *
 
 
 class Target(BaseTarget):

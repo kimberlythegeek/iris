@@ -1,6 +1,6 @@
 import pytest
 
-from src.base.testcase import BaseTest
+from moziris.base.testcase import BaseTest
 
 
 class Test(BaseTest):

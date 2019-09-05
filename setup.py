@@ -2,13 +2,41 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import platform
 from setuptools import setup, find_packages
 
-PACKAGE_NAME = 'iris'
-PACKAGE_VERSION = '2.0'
+PACKAGE_NAME = 'moziris'
+PACKAGE_VERSION = '0.1'
 
 INSTALL_REQUIRES = [
+'coloredlogs==10.0',
+'pyautogui==0.9.41',
+'python-dateutil==2.8.0',
+'opencv-python==4.0.0.21',
+'pytesseract==0.2.6',
+'numpy==1.16.1',
+'image==1.5.27',
+'pyperclip==1.7.0',
+'packaging==19.0',
+'pynput==1.4.2',
+'gitpython==2.1.11',
+'pytest==5.0.1',
+'pygithub==1.43.8',
+'bugzilla==1.0.0',
+'mozinfo==1.0.0',
+'mozinstall==2.0.0',
+'mozdownload==1.26',
+'mozversion==2.1.0',
+'mozlog==4.2.0',
+'mozrunner==7.4.0',
+'mss==4.0.1',
+'more-itertools==5.0.0',
+'psutil==5.6.3',
+'funcy==1.11'
 ]
+
+if platform.system() == "Linux":
+    INSTALL_REQUIRES.append('xlib')
 
 TESTS_REQUIRE = [
 ]
@@ -19,10 +47,10 @@ DEV_REQUIRES = [
 setup(
     name=PACKAGE_NAME,
     version=PACKAGE_VERSION,
-    description='Visual Test Suite for Mozilla Firefox',
+    description='Automation tool for visual testing',
     classifiers=[
         'Environment :: Console',
-        'Development Status :: 1 - Planning Development Status',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
         'Natural Language :: English',
@@ -36,13 +64,14 @@ setup(
         'Topic :: Software Development :: Quality Assurance',
         'Topic :: Software Development :: Testing'
     ],
-    keywords=['mozilla', 'firefox', 'automation', 'regression-testing', 'testing'],
+    keywords=['automation', 'testing'],
     author='Mozilla',
     author_email='mwobensmith@mozilla.com',
-    url='https://github.com/mozilla/iris2',
-    download_url='https://github.com/mozilla/iris2/latest.tar.gz',
+    url='https://github.com/mozilla/iris',
+    download_url='https://github.com/mozilla/iris/latest.tar.gz',
     license='MPL2',
     packages=find_packages(),
+    python_requires='>=3.7.3',
     include_package_data=True,  # See MANIFEST.in
     zip_safe=False,
     use_2to3=False,
@@ -51,7 +80,8 @@ setup(
     extras_require={'dev': DEV_REQUIRES},  # For `pip install -e .[dev]`
     entry_points={
         'console_scripts': [
-            'iris = src.__main__:main'
+            'iris = moziris.scripts.main:main',
+            'api-test = moziris.scripts.test:api_test'
         ]
     }
 )

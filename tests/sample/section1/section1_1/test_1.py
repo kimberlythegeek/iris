@@ -2,10 +2,8 @@ import sys
 
 import pytest
 
-from src.base.testcase import BaseTest
-from src.core.api.finder.pattern import Pattern
-from src.core.api.screen.region import find
-from src.core.api.screen.screen import Rectangle
+from moziris.base.testcase import BaseTest
+from moziris.api import *
 
 
 class Test(BaseTest):
