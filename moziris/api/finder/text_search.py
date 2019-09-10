@@ -134,7 +134,6 @@ def _text_search(text, region: Rectangle = None, multiple_search=False):
         first_word = first_word_occurrences
 
     if word_count == 1:
-        #save_debug_ocr_image(text, img, first_word)
         for result in first_word:
             result.x += region.x
             result.y += region.y

@@ -56,15 +56,18 @@ class EmailClient:
         email = MIMEMultipart()
         body_message = ""
         if isinstance(repo_details, dict):
-            body_message = MIMEText(
-                ''' Repo_details:\n ''' + """Branch_name:""" + repo_details.get(
-                    'iris_branch')
-                + " \n " + '''Branch_head: ''' + repo_details.get(
-                    'iris_branch_head') + "\n\n" + '''Test_Run_Details: ''' + test_status +
-                ''' \nNote: To see the complete run output, please check the attachment.''')
+            body_message = MIMEText((
+                ' Repo_details:\n'
+                ' Branch_name: {}\n'
+                ' Branch_head: {}\n'
+                ' Test_Run_Details: {}\n'
+                ' Note: To see the complete run output, please check the attachment.'.format(
+                    repo_details.get('iris_branch'),
+                    repo_details.get('iris_branch_head'),
+                    test_status)
+                ))
         else:
             raise EmailError("Invalid Body Message")
-
 
         email.attach(body_message)
         attachment = self.get_file_attachment()
