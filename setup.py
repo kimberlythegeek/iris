@@ -32,7 +32,8 @@ INSTALL_REQUIRES = [
 'mss==4.0.1',
 'more-itertools==5.0.0',
 'psutil==5.6.3',
-'funcy==1.11'
+'funcy==1.11',
+'flaky==3.6.1'
 ]
 
 if platform.system() == "Linux":

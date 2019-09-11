@@ -160,7 +160,8 @@ def create_run_log(app):
     meta['total_time'] = app.end_time - app.start_time
 
     tests = {'all_tests': convert_test_list(app.completed_tests),
-             'failed_tests': convert_test_list(app.completed_tests, only_failures=True)}
+             'failed_tests': convert_test_list(app.completed_tests, only_failures=True),
+             'flaky_tests': app.flaky_tests}
 
     run_file = os.path.join(PathManager.get_current_run_dir(), 'run.json')
     run_file_data = {'meta': meta, 'tests': tests}
@@ -186,7 +187,10 @@ def convert_test_list(test_list, only_failures=False):
         except IndexError:
             logger.error('Error parsing test list.')
             logger.error('Try resetting your PYTHONPATH before your next run, i.e.:')
-            logger.error('\texport PYTHONPATH=$PWD')
+            if OSHelper.get_os().value == 'win':
+                logger.error('\tsetx PYTHONPATH %CD%')
+            else:
+                logger.error('\texport PYTHONPATH=$PWD')
             return tests
 
         target = target_root.split(os.sep)[1]
