@@ -81,6 +81,11 @@ def get_target(target_name: str):
 def import_package_by_name(target_name: str, path: str):
     sys.path.append(path)
     logger.debug('Looking for %s in path %s' % (target_name, path))
+
+    target_path = os.path.join(path, 'targets', target_name)
+    path_exists = os.path.exists(target_path)
+    logger.debug('Target path %s exists: %s' % (target_path, path_exists))
+
     try:
         my_module = importlib.import_module('targets.%s.main' % target_name)
         logger.info('Successful import!')
