@@ -74,7 +74,7 @@ def get_target(target_name: str):
     except Exception as e:
         logger.error(e)
         logger.debug('Attempt to load target from code root.')
-        target = import_package_by_name(target_name, Settings.CODE_ROOT)
+        target = import_package_by_name(target_name, Settings.code_root)
         return target
 
 
