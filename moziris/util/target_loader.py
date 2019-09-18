@@ -63,7 +63,6 @@ def scan_dir(path):
     return target_names
 
 
-
 def get_target(target_name: str):
     logger.info('Desired target: %s' % target_name)
     logger.info('Desired module: targets.%s.main' %  target_name)
@@ -94,6 +93,7 @@ def get_target(target_name: str):
 
 
 def import_package_by_name(target_name: str, path: str):
+    logger.debug('Adding path %s to sys.path:' % path)
     sys.path.append(path)
     logger.debug('Looking for target %s in path %s' % (target_name, path))
     try:
