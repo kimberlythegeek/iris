@@ -67,25 +67,35 @@ def scan_dir(path):
 def get_target(target_name: str):
     logger.info('Desired target: %s' % target_name)
     logger.info('Desired module: targets.%s.main' %  target_name)
-    try:
-        logger.debug('Attempt to load target from default package root.')
-        target = import_package_by_name(target_name, os.path.join(Settings.PACKAGE_ROOT, 'moziris'))
-        return target
-    except Exception as e:
-        logger.error(e)
-        logger.debug('Attempt to load target from code root.')
-        target = import_package_by_name(target_name, Settings.code_root)
-        return target
+    target_path = os.path.join(Settings.PACKAGE_ROOT, 'moziris', 'targets', target_name)
+    path_exists = os.path.exists(target_path)
+    logger.debug('Target path %s exists in package: %s' % (target_path, path_exists))
+    if path_exists:
+        try:
+            logger.debug('Attempt to load target from default package root.')
+            target = import_package_by_name(target_name, os.path.join(Settings.PACKAGE_ROOT, 'moziris'))
+            return target
+        except Exception as e:
+            logger.error(e)
+    else:
+        target_path = os.path.join(Settings.code_root, 'targets', target_name)
+        path_exists = os.path.exists(target_path)
+        logger.debug('Target path %s exists in code root: %s' % (target_path, path_exists))
+        if os.path.exists(target_path):
+            try:
+                logger.debug('Attempt to load target from code root.')
+                target = import_package_by_name(target_name, Settings.code_root)
+                return target
+            except Exception as e:
+                logger.error(e)
+        else:
+            path_warning(target_path)
+            raise Exception('Target not found.')
 
 
 def import_package_by_name(target_name: str, path: str):
     sys.path.append(path)
-    logger.debug('Looking for %s in path %s' % (target_name, path))
-
-    target_path = os.path.join(path, 'targets', target_name)
-    path_exists = os.path.exists(target_path)
-    logger.debug('Target path %s exists: %s' % (target_path, path_exists))
-
+    logger.debug('Looking for target %s in path %s' % (target_name, path))
     try:
         my_module = importlib.import_module('targets.%s.main' % target_name)
         logger.info('Successful import!')
@@ -157,7 +167,7 @@ def collect_tests():
 
 
 def path_warning(path):
-    logger.error('Path not found: %s' % path)
+    logger.critical('Path not found: %s' % path)
     logger.critical('This can happen when Iris can\'t find your code root.')
     logger.critical('Try setting these environment variables:')
     if OSHelper.is_windows():

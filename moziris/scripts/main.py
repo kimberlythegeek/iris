@@ -69,7 +69,7 @@ def main():
             try:
                 target_plugin = get_target(args.target)
             except Exception as e:
-                exit_iris('Problems getting target %s:\n%s' % (args.target, e), status=1)
+                exit_iris('\nUnknown target %s, closing Iris.' % args.target, status=1)
             if settings is not None:
                 logger.debug('Passing settings to target: %s' % settings)
                 target_plugin.update_settings(settings)
