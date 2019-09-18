@@ -15,7 +15,7 @@ INSTALL_REQUIRES = [
 'flaky==3.6.1',
 'funcy==1.13',
 'gitpython==3.0.2',
-'more-itertools==5.0.0',
+'more-itertools==7.2.0',
 'mozdownload==1.26',
 'mozinfo==1.1.0',
 'mozinstall==2.0.0',
@@ -31,7 +31,7 @@ INSTALL_REQUIRES = [
 'pygithub==1.43.8',
 'pynput==1.4.2',
 'pyperclip==1.7.0',
-'pytesseract==0.2.6',
+'pytesseract==0.3.0',
 'pytest==5.1.2',
 'python-dateutil==2.8.0'
 ]
