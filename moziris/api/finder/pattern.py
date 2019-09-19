@@ -33,12 +33,24 @@ class Pattern:
 
     def __init__(self, image_name: str, from_path: str = None):
 
-        if from_path is None:
-            path = _get_image_path(inspect.stack()[1][1], image_name)
+        self.caller = inspect.stack()[1][1]
+        self.temp_name = image_name
+        self.loaded = False
+        if from_path is not None:
+            self.load_pattern(path=from_path)
         else:
-            path = from_path
-        name, scale = _parse_name(os.path.split(path)[1])
+            self.load_pattern()
 
+    def load_pattern(self, path = None):
+        if self.loaded:
+            return
+        
+        if path is None:
+            path = _get_image_path(self.caller, self.temp_name)
+        else:
+            path = path
+
+        name, scale = _parse_name(os.path.split(path)[1])
         image = cv2.imread(path, cv2.IMREAD_COLOR)
 
         self.image_name = name
@@ -51,6 +63,7 @@ class Pattern:
         self.color_image = _get_image_from_array(scale, self.rgb_array)
         self.gray_image = _get_gray_image(self.color_image)
         self.gray_array = _get_array_from_image(self.gray_image)
+        self.loaded = True
 
     def __str__(self):
         return '(%s, %s, %s, %s)' % (self.image_name, self.image_path, self.scale_factor, self.similarity)
