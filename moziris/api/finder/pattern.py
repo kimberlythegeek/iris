@@ -38,13 +38,13 @@ class Pattern:
         self.loaded = False
         if from_path is not None:
             self.load_pattern(path=from_path)
-        else:
-            self.load_pattern()
+        #else:
+        #    self.load_pattern()
 
     def load_pattern(self, path = None):
         if self.loaded:
             return
-        
+
         if path is None:
             path = _get_image_path(self.caller, self.temp_name)
         else:
