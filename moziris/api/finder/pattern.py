@@ -32,7 +32,6 @@ class Pattern:
     """
 
     def __init__(self, image_name: str, from_path: str = None):
-
         self.caller = inspect.stack()[1][1]
         self.temp_name = image_name
         self.similarity = Settings.min_similarity
@@ -73,60 +72,60 @@ class Pattern:
                                        self.scale_factor, self.similarity)
 
     def target_offset(self, dx: int, dy: int):
-        self.load_pattern()
         """Add offset to Pattern from top left.
 
         :param int dx: x offset from center.
         :param int dy: y offset from center.
         :return: A new pattern object.
         """
+        self.load_pattern()
         new_pattern = Pattern(self.image_name, from_path=self.image_path)
         new_pattern._target_offset = Location(dx, dy)
         return new_pattern
 
     def get_filename(self):
-        self.load_pattern()
         """Getter for the image_name property."""
+        self.load_pattern()
         return self.image_name
 
     def get_file_path(self):
-        self.load_pattern()
         """Getter for the image_path property."""
+        self.load_pattern()
         return self.image_path
 
     def get_target_offset(self):
-        self.load_pattern()
         """Getter for the target_offset property."""
+        self.load_pattern()
         return self._target_offset
 
     def get_scale_factor(self):
-        self.load_pattern()
         """Getter for the scale_factor property."""
+        self.load_pattern()
         return self.scale_factor
 
     def get_rgb_array(self):
-        self.load_pattern()
         """Getter for the RGB array of image."""
+        self.load_pattern()
         return self.rgb_array
 
     def get_color_image(self):
-        self.load_pattern()
         """Getter for the color_image property."""
+        self.load_pattern()
         return self.color_image
 
     def get_gray_image(self):
-        self.load_pattern()
         """Getter for the gray_image property."""
+        self.load_pattern()
         return self.gray_image
 
     def get_gray_array(self):
-        self.load_pattern()
         """Getter for the gray_array property."""
+        self.load_pattern()
         return self.gray_array
 
     def similar(self, value: float):
-        self.load_pattern()
         """Set the minimum similarity of the given Pattern object to the specified value."""
+        self.load_pattern()
         if value > 0.99:
             self.similarity = 0.99
         elif 0.0 <= value and value <= 0.99:
@@ -136,19 +135,19 @@ class Pattern:
         return self
 
     def exact(self):
-        self.load_pattern()
         """Set the minimum similarity of the given Pattern object to 0.99, which means exact match is required."""
+        self.load_pattern()
         self.similarity = 0.99
         return self
 
     def get_size(self):
-        self.load_pattern()
         """Getter for the _size property."""
+        self.load_pattern()
         return self._size
 
     def get_color_array(self):
-        self.load_pattern()
         """Encode color image to BGR2RGB """
+        self.load_pattern()
         return cv2.cvtColor(np.array(self.color_image), cv2.COLOR_BGR2RGB)
 
 
@@ -199,6 +198,7 @@ def _get_array_from_image(image: Image):
 
 
 def _get_pattern_size(image: Image, scale: float) -> (int, int):
+    """Returns a tuple with values for image width and height"""
     if image is None or scale is None:
         return None
     height, width, channel = image.shape
@@ -234,8 +234,6 @@ def _get_image_path(caller, image: str) -> str:
     - common root
 
     Each directory is scanned for four possible file names, depending on resolution.
-    If the above fails, we will look up the file name in the list of project-wide images,
-    and return whatever we find, with a warning message.
     If we find nothing, we will raise an exception.
     """
 
@@ -279,8 +277,8 @@ def _get_image_path(caller, image: str) -> str:
             image_path = path
             break
 
+    logger.debug('Module %s requests image %s' % (module, image))
     if found:
-        logger.debug('Module %s requests image %s' % (module, image))
         logger.debug('Found %s' % image_path)
         return image_path
     else:
