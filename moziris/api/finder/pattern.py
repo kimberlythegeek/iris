@@ -38,8 +38,6 @@ class Pattern:
         self.loaded = False
         if from_path is not None:
             self.load_pattern(path=from_path)
-        #else:
-        #    self.load_pattern()
 
     def load_pattern(self, path = None):
         if self.loaded:
@@ -66,13 +64,16 @@ class Pattern:
         self.loaded = True
 
     def __str__(self):
+        self.load_pattern()
         return '(%s, %s, %s, %s)' % (self.image_name, self.image_path, self.scale_factor, self.similarity)
 
     def __repr__(self):
+        self.load_pattern()
         return '%s(%r, %r, %r, %r)' % (self.__class__.__name__, self.image_name, self.image_path,
                                        self.scale_factor, self.similarity)
 
     def target_offset(self, dx: int, dy: int):
+        self.load_pattern()
         """Add offset to Pattern from top left.
 
         :param int dx: x offset from center.
@@ -84,38 +85,47 @@ class Pattern:
         return new_pattern
 
     def get_filename(self):
+        self.load_pattern()
         """Getter for the image_name property."""
         return self.image_name
 
     def get_file_path(self):
+        self.load_pattern()
         """Getter for the image_path property."""
         return self.image_path
 
     def get_target_offset(self):
+        self.load_pattern()
         """Getter for the target_offset property."""
         return self._target_offset
 
     def get_scale_factor(self):
+        self.load_pattern()
         """Getter for the scale_factor property."""
         return self.scale_factor
 
     def get_rgb_array(self):
+        self.load_pattern()
         """Getter for the RGB array of image."""
         return self.rgb_array
 
     def get_color_image(self):
+        self.load_pattern()
         """Getter for the color_image property."""
         return self.color_image
 
     def get_gray_image(self):
+        self.load_pattern()
         """Getter for the gray_image property."""
         return self.gray_image
 
     def get_gray_array(self):
+        self.load_pattern()
         """Getter for the gray_array property."""
         return self.gray_array
 
     def similar(self, value: float):
+        self.load_pattern()
         """Set the minimum similarity of the given Pattern object to the specified value."""
         if value > 0.99:
             self.similarity = 0.99
@@ -126,15 +136,18 @@ class Pattern:
         return self
 
     def exact(self):
+        self.load_pattern()
         """Set the minimum similarity of the given Pattern object to 0.99, which means exact match is required."""
         self.similarity = 0.99
         return self
 
     def get_size(self):
+        self.load_pattern()
         """Getter for the _size property."""
         return self._size
 
     def get_color_array(self):
+        self.load_pattern()
         """Encode color image to BGR2RGB """
         return cv2.cvtColor(np.array(self.color_image), cv2.COLOR_BGR2RGB)
 
