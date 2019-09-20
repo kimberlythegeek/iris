@@ -24,11 +24,11 @@ logger = logging.getLogger(__name__)
 
 
 class Pattern:
-    """A pattern is used to associate an image file with additional attributes used in find operations.
+    """A Pattern represents a file on disk that will be used in an on-screen find operation.
 
-    While using a Region.find() operation, if only an image file is provided, Iris searches the region using a default
-    minimum similarity of 0.8. This default value can be changed in Settings.min_similarity. Using similar() you can
-    associate a specific similarity value, that will be used as the minimum value, when this pattern object is searched.
+    Iris searches a given region using the Pattern, with a default minimum similarity of 0.8.
+    This default value can be changed in Settings.min_similarity. Using similar() you can
+    change this minimum value on an instance basis when this Pattern object is searched.
     """
 
     def __init__(self, image_name: str, from_path: str = None):
