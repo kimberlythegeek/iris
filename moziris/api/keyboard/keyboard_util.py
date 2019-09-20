@@ -66,7 +66,7 @@ def is_lock_on(key):
 
     elif OSHelper.is_linux() or OSHelper.is_mac():
         try:
-            cmd = subprocess.Popen('xset q', shell=True, stdout=subprocess.PIPE)
+            cmd = subprocess.run('xset q', shell=True, stdout=subprocess.PIPE, timeout=5)
             shutdown_process('Xquartz')
         except subprocess.CalledProcessError as e:
             logger.error('Command  failed: %s' % repr(e.cmd))
@@ -79,9 +79,8 @@ def is_lock_on(key):
                 processed_lock_key = 'Num'
             elif 'scroll' in processed_lock_key:
                 processed_lock_key = 'Scroll'
-
-            for line in cmd.stdout:
-                line = line.decode("utf-8")
+            stdout = cmd.stdout.decode("utf-8").split('\n')
+            for line in stdout:
                 if processed_lock_key in line:
                     values = re.findall('\d*\D+', ' '.join(line.split()))
                     for val in values:
@@ -101,9 +100,16 @@ def check_keyboard_state(disable=False):
     key_on = False
     keyboard_keys = [Key.CAPS_LOCK, Key.NUM_LOCK, Key.SCROLL_LOCK]
     for key in keyboard_keys:
-        if is_lock_on(key):
-            logger.error('Cannot run Iris because %s is on. Please turn it off to continue.' % key.value.label.upper())
+        try:
+            if is_lock_on(key):
+                logger.error('Cannot run Iris because %s is on. Please turn it off to continue.' % key.value.label.upper())
+                key_on = True
+                break
+        except subprocess.TimeoutExpired:
+            logger.error('Unable to invoke xset command.')
+            logger.error('Please fix xset on your machine, or turn off keyboard checking with -n flag.')
             key_on = True
+            break
     return not key_on
 
 

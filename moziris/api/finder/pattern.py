@@ -45,8 +45,6 @@ class Pattern:
 
         if path is None:
             path = _get_image_path(self.caller, self.temp_name)
-        else:
-            path = path
 
         name, scale = _parse_name(os.path.split(path)[1])
         image = cv2.imread(path, cv2.IMREAD_COLOR)
