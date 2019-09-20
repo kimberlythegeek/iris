@@ -35,6 +35,7 @@ class Pattern:
 
         self.caller = inspect.stack()[1][1]
         self.temp_name = image_name
+        self.similarity = Settings.min_similarity
         self.loaded = False
         if from_path is not None:
             self.load_pattern(path=from_path)
@@ -54,7 +55,6 @@ class Pattern:
         self.image_name = name
         self.image_path = path
         self.scale_factor = scale
-        self.similarity = Settings.min_similarity
         self._target_offset = None
         self._size = _get_pattern_size(image, scale)
         self.rgb_array = _get_array_from_image(image)

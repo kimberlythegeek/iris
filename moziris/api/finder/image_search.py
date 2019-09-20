@@ -36,7 +36,6 @@ def _is_pattern_size_correct(pattern, region):
     if region is None:
         return True
 
-    pattern.load_pattern()
     p_width, p_height = pattern.get_size()
     r_width = region.width
     r_height = region.height
@@ -60,7 +59,6 @@ def match_template(pattern: Pattern, region: Rectangle = None,
     :param MatchTemplateType match_type: Type of match_template (single or multiple)
     :return: Location.
     """
-    pattern.load_pattern()
     if region is None:
         region = DisplayCollection[0].bounds
 
@@ -127,7 +125,6 @@ def image_find(pattern, timeout=None, region=None):
     :param Region region: Region object.
     :return: Location.
     """
-    pattern.load_pattern()
     if not _is_pattern_size_correct(pattern, region):
         return None
 
@@ -156,7 +153,6 @@ def image_vanish(pattern: Pattern, timeout: float = None, region: Rectangle = No
     :param Region region: Region object.
     :return: Location.
     """
-    pattern.load_pattern()
     if not _is_pattern_size_correct(pattern, region):
         return None
 
