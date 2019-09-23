@@ -8,7 +8,14 @@ from moziris.api.settings import Settings
 
 
 class HighlightCircle:
-    def __init__(self, center_x: int, center_y: int, radius: int, color: Color = None, thickness: int = None):
+    def __init__(
+        self,
+        center_x: int,
+        center_y: int,
+        radius: int,
+        color: Color = None,
+        thickness: int = None,
+    ):
 
         if thickness is None:
             thickness = Settings.highlight_thickness

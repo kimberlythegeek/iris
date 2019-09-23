@@ -62,13 +62,15 @@ class Mouse:
                 time.sleep(sleep_amount)
 
         return smooth_move_mouse(
-            self.mouse.position[0],
-            self.mouse.position[1],
-            location.x,
-            location.y
+            self.mouse.position[0], self.mouse.position[1], location.x, location.y
         )
 
-    def press(self, location: Location = None, duration: float = None, button: Button = Button.left):
+    def press(
+        self,
+        location: Location = None,
+        duration: float = None,
+        button: Button = Button.left,
+    ):
         """Mouse press.
 
         :param location: Mouse press location.
@@ -79,7 +81,12 @@ class Mouse:
         self.move(location, duration)
         self.mouse.press(button)
 
-    def release(self, location: Location = None, duration: float = None, button: Button = Button.left):
+    def release(
+        self,
+        location: Location = None,
+        duration: float = None,
+        button: Button = Button.left,
+    ):
         """Mouse press.
 
         :param location: Mouse press location.
@@ -90,8 +97,13 @@ class Mouse:
         self.move(location, duration)
         self.mouse.release(button)
 
-    def general_click(self, location: Location = None, duration: float = None, button: Button = Button.left,
-                      clicks: int = 1):
+    def general_click(
+        self,
+        location: Location = None,
+        duration: float = None,
+        button: Button = Button.left,
+        clicks: int = 1,
+    ):
         """General mouse click location.
 
         :param location: click location

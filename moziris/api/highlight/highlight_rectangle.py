@@ -9,7 +9,15 @@ from moziris.api.rectangle import Rectangle
 
 
 class HighlightRectangle(Rectangle):
-    def __init__(self, x: int, y: int, width: int, height: int, color: Color = None, thickness: int = None):
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+        color: Color = None,
+        thickness: int = None,
+    ):
         Rectangle.__init__(self, x, y, width, height)
 
         if thickness is None:

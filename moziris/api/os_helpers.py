@@ -26,15 +26,40 @@ MULTI_MONITOR_AREA = mss.mss().monitors[0]
 
 class OSHelper:
 
-    LOCALES = ['en-US', 'zh-CN', 'es-ES', 'de', 'fr', 'ru', 'ar', 'ko', 'pt-PT', 'vi',
-               'pl', 'tr', 'ro', 'ja' ,'it', 'pt-BR', 'in', 'en-GB', 'id', 'ca', 'be', 'kk']
+    LOCALES = [
+        "en-US",
+        "zh-CN",
+        "es-ES",
+        "de",
+        "fr",
+        "ru",
+        "ar",
+        "ko",
+        "pt-PT",
+        "vi",
+        "pl",
+        "tr",
+        "ro",
+        "ja",
+        "it",
+        "pt-BR",
+        "in",
+        "en-GB",
+        "id",
+        "ca",
+        "be",
+        "kk",
+    ]
 
     @staticmethod
     def is_high_def_display():
         """Checks if the primary display is high definition."""
         main_display = MONITORS[0]
         screenshot = mss.mss().grab(main_display)
-        if screenshot.width > main_display['width'] or screenshot.height > main_display['height']:
+        if (
+            screenshot.width > main_display["width"]
+            or screenshot.height > main_display["height"]
+        ):
             return True
         return False
 
@@ -48,14 +73,16 @@ class OSHelper:
     @staticmethod
     def get_os():
         """Get the type of the operating system your script is running on."""
-        if OS_NAME == 'win':
+        if OS_NAME == "win":
             return OSPlatform.WINDOWS
-        elif OS_NAME == 'linux':
+        elif OS_NAME == "linux":
             return OSPlatform.LINUX
-        elif OS_NAME == 'mac':
+        elif OS_NAME == "mac":
             return OSPlatform.MAC
         else:
-            raise APIHelperError('Iris does not yet support your current environment: %s' % OS_NAME)
+            raise APIHelperError(
+                "Iris does not yet support your current environment: %s" % OS_NAME
+            )
 
     @staticmethod
     def is_mac():
@@ -89,10 +116,12 @@ class OSHelper:
         :return: String value of the current operating system.
         """
         current_os = OSHelper.get_os()
-        if current_os is OSPlatform.WINDOWS and OS_VERSION == '6.1':
-            return 'win7'
+        if current_os is OSPlatform.WINDOWS and OS_VERSION == "6.1":
+            return "win7"
         elif current_os is OSPlatform.MAC:
-            return 'osx_%s' % 'retina ' if OSHelper.is_high_def_display() else 'non_retina'
+            return (
+                "osx_%s" % "retina " if OSHelper.is_high_def_display() else "non_retina"
+            )
         else:
             return current_os.value
 
@@ -106,7 +135,7 @@ class OSHelper:
 
     @staticmethod
     def use_multiprocessing():
-        return multiprocessing.cpu_count() >= 4 and OSHelper.get_os() != 'win'
+        return multiprocessing.cpu_count() >= 4 and OSHelper.get_os() != "win"
 
     @staticmethod
     def _is_locked(filepath):
@@ -117,24 +146,25 @@ class OSHelper:
         file_object = None
         if os.path.exists(filepath):
             try:
-                logger.debug('Trying to open file: %s' % filepath)
+                logger.debug("Trying to open file: %s" % filepath)
                 buffer_size = 8
                 # Open file in append mode and read the first 8 characters.
-                file_object = open(filepath, 'a', buffer_size)
+                file_object = open(filepath, "a", buffer_size)
                 if file_object:
-                    logger.debug('File is not locked: %s' % filepath)
+                    logger.debug("File is not locked: %s" % filepath)
                     locked = False
             except IOError as message:
-                logger.debug('File is locked (unable to open in append mode): %s.' % message)
+                logger.debug(
+                    "File is locked (unable to open in append mode): %s." % message
+                )
                 locked = True
             finally:
                 if file_object:
                     file_object.close()
-                    logger.debug('File closed: %s' % filepath)
+                    logger.debug("File closed: %s" % filepath)
         else:
-            logger.debug('File not found: %s' % filepath)
+            logger.debug("File not found: %s" % filepath)
         return locked
-
 
     @staticmethod
     def wait_for_files(filepath):
@@ -145,10 +175,14 @@ class OSHelper:
         # If the file doesn't exist, wait wait_time seconds and try again
         # until it's found.
         while not os.path.exists(filepath):
-            logger.debug('%s hasn\'t arrived. Waiting %s seconds.' % (filepath, wait_time))
+            logger.debug(
+                "%s hasn't arrived. Waiting %s seconds." % (filepath, wait_time)
+            )
             time.sleep(wait_time)
             # If the file exists but locked, wait wait_time seconds and check
             # again until it's no longer locked by another process.
         while OSHelper._is_locked(filepath):
-            logger.debug('%s is currently in use. Waiting %s seconds.' % (filepath, wait_time))
+            logger.debug(
+                "%s is currently in use. Waiting %s seconds." % (filepath, wait_time)
+            )
             time.sleep(wait_time)

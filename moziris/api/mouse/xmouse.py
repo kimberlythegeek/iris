@@ -12,10 +12,20 @@ from moziris.api.keyboard.keyboard import XScreen
 
 
 class XMouse(XScreen):
-
     def __init__(self):
-        self.display = Display(os.environ['DISPLAY'])
-        self.MOUSE_BUTTONS = {'left': 1, 'middle': 2, 'right': 3, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7}
+        self.display = Display(os.environ["DISPLAY"])
+        self.MOUSE_BUTTONS = {
+            "left": 1,
+            "middle": 2,
+            "right": 3,
+            1: 1,
+            2: 2,
+            3: 3,
+            4: 4,
+            5: 5,
+            6: 6,
+            7: 7,
+        }
 
     def click(self, location: Location, button: str):
 
@@ -27,7 +37,9 @@ class XMouse(XScreen):
 
         """
 
-        assert button in self.MOUSE_BUTTONS.keys(), "button argument not in ('left', 'middle', 'right', 4, 5, 6, 7)"
+        assert (
+            button in self.MOUSE_BUTTONS.keys()
+        ), "button argument not in ('left', 'middle', 'right', 4, 5, 6, 7)"
         button = self.MOUSE_BUTTONS[button]
 
         self._mouseDown(location, button)
@@ -102,7 +114,9 @@ class XMouse(XScreen):
 
         """
         self.moveTo(location)
-        assert button in self.MOUSE_BUTTONS.keys(), "button argument not in ('left', 'middle', 'right', 4, 5, 6, 7)"
+        assert (
+            button in self.MOUSE_BUTTONS.keys()
+        ), "button argument not in ('left', 'middle', 'right', 4, 5, 6, 7)"
         button = self.MOUSE_BUTTONS[button]
         fake_input(self.display, X.ButtonPress, button)
         self.display.sync()
@@ -116,7 +130,9 @@ class XMouse(XScreen):
 
         """
         self.moveTo(location)
-        assert button in self.MOUSE_BUTTONS.keys(), "button argument not in ('left', 'middle', 'right', 4, 5, 6, 7)"
+        assert (
+            button in self.MOUSE_BUTTONS.keys()
+        ), "button argument not in ('left', 'middle', 'right', 4, 5, 6, 7)"
         button = self.MOUSE_BUTTONS[button]
         fake_input(self.display, X.ButtonRelease, button)
         self.display.sync()

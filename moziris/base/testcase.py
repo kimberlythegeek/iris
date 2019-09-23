@@ -14,7 +14,6 @@ from funcy import compose
 
 
 class BaseTest:
-
     def setup(self):
         return
 

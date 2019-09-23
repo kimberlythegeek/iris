@@ -37,34 +37,36 @@ class ScreenshotImage:
         if OSHelper.is_linux():
             screen_region = region
         else:
-            screen_region = {'top': int(region.y), 'left': int(region.x),
-                             'width': int(region.width), 'height': int(region.height)}
+            screen_region = {
+                "top": int(region.y),
+                "left": int(region.x),
+                "width": int(region.width),
+                "height": int(region.height),
+            }
 
         self._raw_image = _region_to_image(screen_region)
         self._gray_array = _convert_image_to_gray(self._raw_image)
         self._color_array = _convert_image_to_color(self._raw_image)
 
-
         height, width = self._gray_array.shape
         self.width = width
         self.height = height
-
-
-
-
 
         scale = DisplayCollection[screen_id].scale
 
         if scale != 1:
             self.width = int(width / scale)
             self.height = int(height / scale)
-            self._color_array = cv2.resize(self._color_array,
-                                          dsize=(self.width, self.height),
-                                          interpolation=cv2.INTER_CUBIC)
-            self._gray_array = cv2.resize(self._gray_array,
-                                          dsize=(self.width, self.height),
-                                          interpolation=cv2.INTER_CUBIC)
-
+            self._color_array = cv2.resize(
+                self._color_array,
+                dsize=(self.width, self.height),
+                interpolation=cv2.INTER_CUBIC,
+            )
+            self._gray_array = cv2.resize(
+                self._gray_array,
+                dsize=(self.width, self.height),
+                interpolation=cv2.INTER_CUBIC,
+            )
 
     def get_gray_array(self):
         """Getter for the gray_array property."""
@@ -75,7 +77,9 @@ class ScreenshotImage:
         return Image.fromarray(self._gray_array)
 
     def binarize(self):
-        return cv2.threshold(self._gray_array, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        return cv2.threshold(
+            self._gray_array, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU
+        )[1]
 
     def get_raw_image(self):
         """Getter raw_image property."""
@@ -96,15 +100,16 @@ class ScreenshotImage:
         return image.show()
 
 
-
 def _region_to_image(region) -> Image or ScreenshotError:
     if not OSHelper.is_linux():
         grabbed_area = _mss_screenshot(region)
     else:
         try:
-            grabbed_area = np.array(screenshot(region=(region.x, region.y, region.width, region.height)))
+            grabbed_area = np.array(
+                screenshot(region=(region.x, region.y, region.width, region.height))
+            )
         except (IOError, OSError):
-            logger.debug('Call to pyautogui.screnshot failed, using mss instead.')
+            logger.debug("Call to pyautogui.screnshot failed, using mss instead.")
             grabbed_area = _mss_screenshot(region)
     return grabbed_area
 
@@ -126,4 +131,4 @@ def _mss_screenshot(region):
     try:
         return np.array(_mss.grab(region))
     except Exception:
-        raise ScreenshotError('Unable to take screenshot.')
+        raise ScreenshotError("Unable to take screenshot.")

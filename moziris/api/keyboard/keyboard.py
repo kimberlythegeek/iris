@@ -23,7 +23,7 @@ try:
     import Xlib.XK
 except ImportError:
     if OSHelper.is_linux():
-        logger.error('Could not import Xlib modules.')
+        logger.error("Could not import Xlib modules.")
         exit(1)
 
 pyautogui.FAILSAFE = False
@@ -70,11 +70,14 @@ def type(text: Key or str = None, modifier=None, interval: int = None):
 
 class XScreen:
     def __init__(self):
-        self.display = Display(os.environ['DISPLAY'])
+        self.display = Display(os.environ["DISPLAY"])
 
     def _screen_size(self):
         """Returns Screen Width and Height of the virtual screen. """
-        return self.display.screen().width_in_pixels, self.display.screen().height_in_pixels
+        return (
+            self.display.screen().width_in_pixels,
+            self.display.screen().height_in_pixels,
+        )
 
 
 class _XKeyboard(XScreen):
@@ -97,12 +100,12 @@ class _XKeyboard(XScreen):
 
         needs_shift = is_shift_character(key)
         if needs_shift:
-            fake_input(self.display, X.KeyPress, self.keyboard_mapping('shift'))
+            fake_input(self.display, X.KeyPress, self.keyboard_mapping("shift"))
 
         fake_input(self.display, X.KeyPress, self.keyboard_mapping(key))
 
         if needs_shift:
-            fake_input(self.display, X.KeyRelease, self.keyboard_mapping('shift'))
+            fake_input(self.display, X.KeyRelease, self.keyboard_mapping("shift"))
         self.display.sync()
 
     def press(self, characters, interval):
@@ -174,20 +177,23 @@ class _XKeyboard(XScreen):
         """
         if modifier is None:
             if isinstance(text, Key):
-                logger.debug('Type Method: [Reserved key: {}]'.format(text))
+                logger.debug("Type Method: [Reserved key: {}]".format(text))
                 virtual_keyboard.key_down(text)
                 virtual_keyboard.key_up(text)
                 time.sleep(Settings.key_shortcut_delay)
             else:
                 if interval is None:
                     interval = Settings.type_delay
-                logger.debug('Type Method: [Text: {}]'.format(text))
+                logger.debug("Type Method: [Text: {}]".format(text))
                 virtual_keyboard.type_write(text, interval)
         else:
             modifier_keys = get_active_modifiers(modifier)
             num_keys = len(modifier_keys)
-            logger.debug('Type Method: [Modifiers ({}): {}] + [Text: {}]'
-                         .format(num_keys, ' '.join(key.name for key in modifier_keys), text))
+            logger.debug(
+                "Type Method: [Modifiers ({}): {}] + [Text: {}]".format(
+                    num_keys, " ".join(key.name for key in modifier_keys), text
+                )
+            )
 
             if num_keys == 1:
                 virtual_keyboard.key_down(modifier_keys[0])
@@ -210,12 +216,12 @@ class _XKeyboard(XScreen):
                 time.sleep(Settings.key_shortcut_delay)
                 virtual_keyboard.key_up(modifier_keys[0])
             else:
-                logger.error('Returned key modifiers out of range.')
+                logger.error("Returned key modifiers out of range.")
 
         if Settings.type_delay != Settings.DEFAULT_TYPE_DELAY:
             Settings.type_delay = Settings.DEFAULT_TYPE_DELAY
 
-        logger.debug('END virtual type')
+        logger.debug("END virtual type")
 
 
 if OSHelper.is_linux():
@@ -268,7 +274,7 @@ class _Keyboard:
         """
         if modifier is None:
             if isinstance(text, Key):
-                logger.debug('Type Method: [Reserved key: {}]'.format(text))
+                logger.debug("Type Method: [Reserved key: {}]".format(text))
                 key_down(text)
                 key_up(text)
                 time.sleep(Settings.key_shortcut_delay)
@@ -276,14 +282,18 @@ class _Keyboard:
                 if interval is None:
                     interval = Settings.type_delay
 
-                logger.debug('Type Method: [Text: {}]'.format(text))
+                logger.debug("Type Method: [Text: {}]".format(text))
                 pyautogui.typewrite(text, interval)
         else:
             from moziris.api.keyboard.keyboard_util import get_active_modifiers
+
             modifier_keys = get_active_modifiers(modifier)
             num_keys = len(modifier_keys)
-            logger.debug('Type Method: [Modifiers ({}): {}] + [Text: {}]'
-                         .format(num_keys, ' '.join(key.name for key in modifier_keys), text))
+            logger.debug(
+                "Type Method: [Modifiers ({}): {}] + [Text: {}]".format(
+                    num_keys, " ".join(key.name for key in modifier_keys), text
+                )
+            )
             if num_keys == 1:
                 key_down(modifier_keys[0])
                 time.sleep(Settings.key_shortcut_delay)
@@ -305,7 +315,7 @@ class _Keyboard:
                 time.sleep(Settings.key_shortcut_delay)
                 key_up(modifier_keys[0])
             else:
-                logger.error('Returned key modifiers out of range.')
+                logger.error("Returned key modifiers out of range.")
 
         if Settings.type_delay != Settings.DEFAULT_TYPE_DELAY:
             Settings.type_delay = Settings.DEFAULT_TYPE_DELAY

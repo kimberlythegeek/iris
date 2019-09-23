@@ -13,7 +13,7 @@ from moziris.util.path_manager import PathManager
 core_args = get_core_args()
 
 SUCCESS_LEVEL_NUM = 35
-logging.addLevelName(SUCCESS_LEVEL_NUM, 'SUCCESS')
+logging.addLevelName(SUCCESS_LEVEL_NUM, "SUCCESS")
 
 logger = logging.getLogger(__name__)
 
@@ -33,39 +33,47 @@ logging.Logger.success = success
 
 def initialize_logger_level(level):
     if level == 10:
-        coloredlogs.install(level='DEBUG')
+        coloredlogs.install(level="DEBUG")
     elif level == 20:
-        coloredlogs.install(level='INFO')
+        coloredlogs.install(level="INFO")
     elif level == 30:
-        coloredlogs.install(level='WARNING')
+        coloredlogs.install(level="WARNING")
     elif level == 40:
-        coloredlogs.install(level='ERROR')
+        coloredlogs.install(level="ERROR")
     elif level == 50:
-        coloredlogs.install(level='CRITICAL')
+        coloredlogs.install(level="CRITICAL")
 
 
 def set_log_format():
 
     if core_args.level < 20:
-        log_format = '%(asctime)s [%(levelname)s] %(message)s'
+        log_format = "%(asctime)s [%(levelname)s] %(message)s"
         coloredlogs.DEFAULT_LOG_FORMAT = log_format
-        coloredlogs.DEFAULT_FIELD_STYLES = {'levelname': {'color': 'cyan', 'bold': True}}
-        coloredlogs.DEFAULT_LEVEL_STYLES = {'warning': {'color': 'yellow', 'bold': True},
-                                            'success': {'color': 'green', 'bold': True},
-                                            'error': {'color': 'red', 'bold': True}}
+        coloredlogs.DEFAULT_FIELD_STYLES = {
+            "levelname": {"color": "cyan", "bold": True}
+        }
+        coloredlogs.DEFAULT_LEVEL_STYLES = {
+            "warning": {"color": "yellow", "bold": True},
+            "success": {"color": "green", "bold": True},
+            "error": {"color": "red", "bold": True},
+        }
     else:
-        log_format = '%(message)s'
+        log_format = "%(message)s"
         coloredlogs.DEFAULT_LOG_FORMAT = log_format
-        coloredlogs.DEFAULT_LEVEL_STYLES = {'warning': {'color': 'yellow', 'bold': True},
-                                            'success': {'color': 'green', 'bold': True},
-                                            'error': {'color': 'red', 'bold': True}}
+        coloredlogs.DEFAULT_LEVEL_STYLES = {
+            "warning": {"color": "yellow", "bold": True},
+            "success": {"color": "green", "bold": True},
+            "error": {"color": "red", "bold": True},
+        }
     return log_format
 
 
 def initialize_logger():
-    logging.basicConfig(filename=PathManager.get_log_file_path(), format=set_log_format())
+    logging.basicConfig(
+        filename=PathManager.get_log_file_path(), format=set_log_format()
+    )
     initialize_logger_level(core_args.level)
 
     # Control pytest terminal output via environment variable instead of parameter.
     if core_args.level > 10:
-        os.environ['PYTEST_ADDOPTS'] = '-p no:terminal'
+        os.environ["PYTEST_ADDOPTS"] = "-p no:terminal"

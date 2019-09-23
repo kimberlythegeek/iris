@@ -18,7 +18,12 @@ except AttributeError:
     from moziris.api.enums import Button
 
 
-def move(lps: Location or Pattern or str, duration: int = None, region: Rectangle = None, align: Alignment = None):
+def move(
+    lps: Location or Pattern or str,
+    duration: int = None,
+    region: Rectangle = None,
+    align: Alignment = None,
+):
     """Mouse Move.
 
     :param lps: Location or Pattern or String.
@@ -38,7 +43,11 @@ def move(lps: Location or Pattern or str, duration: int = None, region: Rectangl
     Mouse().move(click_location, duration)
 
 
-def hover(lps: Location or Pattern or str = None, region: Rectangle = None, align: Alignment = None):
+def hover(
+    lps: Location or Pattern or str = None,
+    region: Rectangle = None,
+    align: Alignment = None,
+):
     """Mouse Hover.
 
     :param lps: Location or Pattern or String.
@@ -49,8 +58,13 @@ def hover(lps: Location or Pattern or str = None, region: Rectangle = None, alig
     move(lps, 1, region, align)
 
 
-def press(lps: Location or Pattern or str, duration: int = None, region: Rectangle = None, button: Button = Button.left,
-          align: Alignment = None):
+def press(
+    lps: Location or Pattern or str,
+    duration: int = None,
+    region: Rectangle = None,
+    button: Button = Button.left,
+    align: Alignment = None,
+):
     """Mouse Press.
 
     :param lps: Location or Pattern or String.
@@ -71,8 +85,13 @@ def press(lps: Location or Pattern or str, duration: int = None, region: Rectang
     Mouse().press(click_location, duration, button)
 
 
-def release(lps: Location or Pattern or str, duration: int = None, region: Rectangle = None,
-            button: Button = Button.left, align: Alignment = None):
+def release(
+    lps: Location or Pattern or str,
+    duration: int = None,
+    region: Rectangle = None,
+    button: Button = Button.left,
+    align: Alignment = None,
+):
     """Mouse Release.
 
     :param lps: Location or Pattern or String.
@@ -93,8 +112,12 @@ def release(lps: Location or Pattern or str, duration: int = None, region: Recta
     Mouse().release(click_location, duration, button)
 
 
-def click(lps: Location or Pattern or str = None, duration: int = None, region: Rectangle = None,
-          align: Alignment = None):
+def click(
+    lps: Location or Pattern or str = None,
+    duration: int = None,
+    region: Rectangle = None,
+    align: Alignment = None,
+):
     """Mouse Left Click.
 
     :param lps: Location or Pattern or String.
@@ -115,8 +138,12 @@ def click(lps: Location or Pattern or str = None, duration: int = None, region: 
     Mouse().general_click(click_location, duration, Button.left, 1)
 
 
-def right_click(lps: Location or Pattern or str = None, duration: int = None, region: Rectangle = None,
-                align: Alignment = None):
+def right_click(
+    lps: Location or Pattern or str = None,
+    duration: int = None,
+    region: Rectangle = None,
+    align: Alignment = None,
+):
     """Mouse Right Click.
 
     :param lps: Location or Pattern or String.
@@ -137,8 +164,12 @@ def right_click(lps: Location or Pattern or str = None, duration: int = None, re
     Mouse().general_click(click_location, duration, Button.right, 1)
 
 
-def double_click(lps: Location or Pattern or str = None, duration: int = None, region: Rectangle = None,
-                 align: Alignment = None):
+def double_click(
+    lps: Location or Pattern or str = None,
+    duration: int = None,
+    region: Rectangle = None,
+    align: Alignment = None,
+):
     """Mouse Double Click.
 
     :param lps: Location or Pattern or String.
@@ -159,8 +190,12 @@ def double_click(lps: Location or Pattern or str = None, duration: int = None, r
     Mouse().general_click(click_location, duration, Button.left, 2)
 
 
-def middle_click(lps: Location or Pattern or str = None, duration: int = None, region: Rectangle = None,
-                 align: Alignment = None):
+def middle_click(
+    lps: Location or Pattern or str = None,
+    duration: int = None,
+    region: Rectangle = None,
+    align: Alignment = None,
+):
     """Mouse middle click. Wrapper over _general_click.
 
     :param lps: Location or Pattern or String.
@@ -181,9 +216,13 @@ def middle_click(lps: Location or Pattern or str = None, duration: int = None, r
     Mouse().general_click(click_location, duration, Button.middle, 1)
 
 
-def drag_drop(drag_from: Location or Pattern or str, drop_to: Location or Pattern or str, region: Rectangle = None,
-              duration: float = None,
-              align: Alignment = None):
+def drag_drop(
+    drag_from: Location or Pattern or str,
+    drop_to: Location or Pattern or str,
+    region: Rectangle = None,
+    duration: float = None,
+    align: Alignment = None,
+):
     """Mouse drag and drop.
 
     :param drag_from: Starting point for drag and drop. Can be pattern, string or location.
@@ -201,7 +240,10 @@ def drag_drop(drag_from: Location or Pattern or str, drop_to: Location or Patter
     elif isinstance(drag_from, str):
         loc_from = _get_string_click_location(drag_from, region, align)
     else:
-        raise ValueError('drag_from argument must be Location or Pattern or str, %s' % type(drag_from))
+        raise ValueError(
+            "drag_from argument must be Location or Pattern or str, %s"
+            % type(drag_from)
+        )
 
     if isinstance(drop_to, Pattern):
         loc_to = _get_pattern_click_location(drop_to, region, align)
@@ -210,7 +252,9 @@ def drag_drop(drag_from: Location or Pattern or str, drop_to: Location or Patter
     elif isinstance(drop_to, Location):
         loc_to = drop_to
     else:
-        raise ValueError('drop_to argument must be Location or Pattern or str, %s' % type(drop_to))
+        raise ValueError(
+            "drop_to argument must be Location or Pattern or str, %s" % type(drop_to)
+        )
 
     Mouse().drag_and_drop(loc_from, loc_to, duration)
 
@@ -249,7 +293,9 @@ def scroll(clicks):
     pyautogui.scroll(clicks)
 
 
-def _get_pattern_click_location(ps: Pattern, region: Rectangle = None, align: Alignment = None):
+def _get_pattern_click_location(
+    ps: Pattern, region: Rectangle = None, align: Alignment = None
+):
     """Returns the click location based on the pattern/string found location and alignment."""
     if align is None:
         align = Alignment.CENTER
@@ -258,7 +304,7 @@ def _get_pattern_click_location(ps: Pattern, region: Rectangle = None, align: Al
     find_location = image_find(ps, region=region)
 
     if find_location is None:
-        raise FindError('Unable to find pattern {}'.format(ps.get_filename()))
+        raise FindError("Unable to find pattern {}".format(ps.get_filename()))
 
     if ps.get_target_offset():
         target_offset = ps.get_target_offset()
@@ -269,7 +315,9 @@ def _get_pattern_click_location(ps: Pattern, region: Rectangle = None, align: Al
     return rect.apply_alignment(align)
 
 
-def _get_string_click_location(ps: str, region: Rectangle = None, align: Alignment = None):
+def _get_string_click_location(
+    ps: str, region: Rectangle = None, align: Alignment = None
+):
     if align is None:
         align = Alignment.CENTER
 
@@ -277,9 +325,9 @@ def _get_string_click_location(ps: str, region: Rectangle = None, align: Alignme
 
     if len(find_location) == 0:
         if isinstance(ps, Pattern):
-            error_str = 'Unable to find pattern {}'.format(ps.get_filename())
+            error_str = "Unable to find pattern {}".format(ps.get_filename())
         else:
-            error_str = 'Unable to find string {}'.format(ps)
+            error_str = "Unable to find string {}".format(ps)
         raise FindError(error_str)
 
     return find_location[0].apply_alignment(align)

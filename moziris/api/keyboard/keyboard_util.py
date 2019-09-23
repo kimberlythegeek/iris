@@ -26,19 +26,19 @@ def shutdown_process(process_name: str):
     """Checks if the process name exists in the process list and close it ."""
 
     if OSHelper.is_windows():
-        command_str = 'taskkill /IM ' + process_name + '.exe'
+        command_str = "taskkill /IM " + process_name + ".exe"
         try:
             subprocess.Popen(command_str, shell=True, stdout=subprocess.PIPE)
         except subprocess.CalledProcessError:
             logger.error('Command  failed: "%s"' % command_str)
-            raise Exception('Unable to run Command.')
+            raise Exception("Unable to run Command.")
     elif OSHelper.is_mac() or OSHelper.is_linux():
-        command_str = 'pkill ' + process_name
+        command_str = "pkill " + process_name
         try:
             subprocess.Popen(command_str, shell=True, stdout=subprocess.PIPE)
         except subprocess.CalledProcessError:
             logger.error('Command  failed: "%s"' % command_str)
-            raise Exception('Unable to run Command.')
+            raise Exception("Unable to run Command.")
 
 
 def is_lock_on(key):
@@ -59,32 +59,34 @@ def is_lock_on(key):
         try:
             key_state = hll_dll.GetKeyState(keyboard_code) & 1
         except Exception:
-            raise Exception('Unable to run Command.')
+            raise Exception("Unable to run Command.")
         if key_state == 1:
             return True
         return False
 
     elif OSHelper.is_linux() or OSHelper.is_mac():
         try:
-            cmd = subprocess.run('xset q', shell=True, stdout=subprocess.PIPE, timeout=5)
-            shutdown_process('Xquartz')
+            cmd = subprocess.run(
+                "xset q", shell=True, stdout=subprocess.PIPE, timeout=5
+            )
+            shutdown_process("Xquartz")
         except subprocess.CalledProcessError as e:
-            logger.error('Command  failed: %s' % repr(e.cmd))
-            raise Exception('Unable to run Command.')
+            logger.error("Command  failed: %s" % repr(e.cmd))
+            raise Exception("Unable to run Command.")
         else:
             processed_lock_key = key.value.label
-            if 'caps' in processed_lock_key:
-                processed_lock_key = 'Caps'
-            elif 'num' in processed_lock_key:
-                processed_lock_key = 'Num'
-            elif 'scroll' in processed_lock_key:
-                processed_lock_key = 'Scroll'
-            stdout = cmd.stdout.decode("utf-8").split('\n')
+            if "caps" in processed_lock_key:
+                processed_lock_key = "Caps"
+            elif "num" in processed_lock_key:
+                processed_lock_key = "Num"
+            elif "scroll" in processed_lock_key:
+                processed_lock_key = "Scroll"
+            stdout = cmd.stdout.decode("utf-8").split("\n")
             for line in stdout:
                 if processed_lock_key in line:
-                    values = re.findall('\d*\D+', ' '.join(line.split()))
+                    values = re.findall(r"\d*\D+", " ".join(line.split()))
                     for val in values:
-                        if processed_lock_key in val and 'off' in val:
+                        if processed_lock_key in val and "off" in val:
                             return False
         return True
 
@@ -102,12 +104,17 @@ def check_keyboard_state(disable=False):
     for key in keyboard_keys:
         try:
             if is_lock_on(key):
-                logger.error('Cannot run Iris because %s is on. Please turn it off to continue.' % key.value.label.upper())
+                logger.error(
+                    "Cannot run Iris because %s is on. Please turn it off to continue."
+                    % key.value.label.upper()
+                )
                 key_on = True
                 break
         except subprocess.TimeoutExpired:
-            logger.error('Unable to invoke xset command.')
-            logger.error('Please fix xset on your machine, or turn off keyboard checking with -n flag.')
+            logger.error("Unable to invoke xset command.")
+            logger.error(
+                "Please fix xset on your machine, or turn off keyboard checking with -n flag."
+            )
             key_on = True
             break
     return not key_on
@@ -119,9 +126,7 @@ def get_active_modifiers(key):
     :param key: Key modifier.
     :return: Returns an array with all the active modifiers.
     """
-    all_modifiers = [
-        Key.SHIFT,
-        Key.CTRL]
+    all_modifiers = [Key.SHIFT, Key.CTRL]
     if OSHelper.is_mac():
         all_modifiers.append(Key.CMD)
     elif OSHelper.is_windows():

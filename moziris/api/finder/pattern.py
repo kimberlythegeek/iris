@@ -39,7 +39,7 @@ class Pattern:
         if from_path is not None:
             self.load_pattern(path=from_path)
 
-    def load_pattern(self, path = None):
+    def load_pattern(self, path=None):
         if self.loaded:
             return
 
@@ -62,12 +62,22 @@ class Pattern:
 
     def __str__(self):
         self.load_pattern()
-        return '(%s, %s, %s, %s)' % (self.image_name, self.image_path, self.scale_factor, self.similarity)
+        return "(%s, %s, %s, %s)" % (
+            self.image_name,
+            self.image_path,
+            self.scale_factor,
+            self.similarity,
+        )
 
     def __repr__(self):
         self.load_pattern()
-        return '%s(%r, %r, %r, %r)' % (self.__class__.__name__, self.image_name, self.image_path,
-                                       self.scale_factor, self.similarity)
+        return "%s(%r, %r, %r, %r)" % (
+            self.__class__.__name__,
+            self.image_name,
+            self.image_path,
+            self.scale_factor,
+            self.similarity,
+        )
 
     def target_offset(self, dx: int, dy: int):
         """Add offset to Pattern from top left.
@@ -157,16 +167,18 @@ def _parse_name(full_name: str) -> (str, int):
 
     :return: Pair of image name and scale factor.
     """
-    start_symbol = '@'
-    end_symbol = 'x.'
+    start_symbol = "@"
+    end_symbol = "x."
     if start_symbol not in full_name:
         return full_name, 1
     else:
         try:
             start_index = full_name.index(start_symbol)
             end_index = full_name.index(end_symbol, start_index)
-            scale_factor = float(full_name[start_index + 1:end_index])
-            image_name = full_name[0:start_index] + full_name[end_index + 1:len(full_name)]
+            scale_factor = float(full_name[start_index + 1 : end_index])
+            image_name = (
+                full_name[0:start_index] + full_name[end_index + 1 : len(full_name)]
+            )
             return image_name, scale_factor
         except ValueError:
             logger.warning('Invalid file name format: "%s".' % full_name)
@@ -214,7 +226,7 @@ def _get_gray_image(colored_image: Image) -> Image:
     """Converts colored image to gray image."""
     if colored_image is None:
         return None
-    return colored_image.convert('L')
+    return colored_image.convert("L")
 
 
 def _get_image_path(caller, image: str) -> str:
@@ -237,26 +249,26 @@ def _get_image_path(caller, image: str) -> str:
 
     module = os.path.split(caller)[1]
     module_directory = os.path.split(caller)[0]
-    file_name = image.split('.')[0]
-    names = [image, '%s@2x.png' % file_name]
+    file_name = image.split(".")[0]
+    names = [image, "%s@2x.png" % file_name]
 
-    if OSHelper.get_os_version() == 'win7':
-        os_version = 'win7'
+    if OSHelper.get_os_version() == "win7":
+        os_version = "win7"
     else:
         os_version = OSHelper.get_os().value
     paths = []
 
     current_locale = Settings.locale
-    platform_directory = os.path.join(module_directory, 'images', os_version)
+    platform_directory = os.path.join(module_directory, "images", os_version)
 
-    if current_locale != '':
+    if current_locale != "":
         platform_locale_directory = os.path.join(platform_directory, current_locale)
         for name in names:
             paths.append(os.path.join(platform_locale_directory, name))
 
-    common_directory = os.path.join(module_directory, 'images', 'common')
+    common_directory = os.path.join(module_directory, "images", "common")
 
-    if current_locale != '':
+    if current_locale != "":
         common_locale_directory = os.path.join(common_directory, current_locale)
         for name in names:
             paths.append(os.path.join(common_locale_directory, name))
@@ -275,9 +287,9 @@ def _get_image_path(caller, image: str) -> str:
             image_path = path
             break
 
-    logger.debug('Module %s requests image %s' % (module, image))
+    logger.debug("Module %s requests image %s" % (module, image))
     if found:
-        logger.debug('Found %s' % image_path)
+        logger.debug("Found %s" % image_path)
         return image_path
     else:
-        raise APIHelperError('Image not found')
+        raise APIHelperError("Image not found")
