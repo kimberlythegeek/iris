@@ -158,15 +158,6 @@ help_script(){
             fi
 
 
-            echo -e "\n ${A} Checking if Tesseract is installed \n"
-            if command -v tesseract &>/dev/null; then
-                echo -e "${GREEN}  ---> ${C} Tesseract is installed. ${C} ${STD} Version: \n\n$(tesseract -v)"
-                echo -e "\n  ---> Location: $(which tesseract) \n"
-            else
-                echo -e "\n${RED}  ---> ${X} Error... Tesseract not found installed. Please run the Iris Bootstrap. ${X} ${STD}\n"
-            fi
-
-
             echo -e "\n ${A} Checking if 7zip is installed \n"
             if command -v p7zip &>/dev/null; then
                 echo -e "${GREEN}  ---> ${C} 7zip is installed. ${C} ${STD}"
@@ -362,15 +353,6 @@ help_script(){
                     echo -e "\n  ---> Version and location: $(python3.7 -m virtualenv --version)"
             else
                 echo -e "\n${RED}  ---> ${X} Error... Virtualenv is not installed. Please run the Iris Bootstrap. ${X} ${STD}\n"
-            fi
-
-
-            echo -e "\n → Checking if Tesseract is installed \n"
-            if command -v tesseract &>/dev/null; then
-                echo -e "${GREEN}  ---> √ Tesseract is installed. √ ${STD} \nVersion: \n$(tesseract -v)"
-                echo -e "\n  ---> Location: $(which tesseract) \n"
-            else
-                echo -e "\n${RED}  ---> ✘ Error... Tesseract not found installed. Please run the Iris Bootstrap. ✘ ${STD}\n"
             fi
 
 
@@ -581,16 +563,6 @@ help_script(){
                 echo -e "\n $(scoop info git) \n"
             else
                 echo -e "\n${RED}  ---> ${X} Error... Git not found. Please run the Iris Bootstrap. ${X} ${STD}\n"
-            fi
-
-
-            echo -e "\n ${A} Checking if Tesseract is installed \n"
-            if command -v tesseract &>/dev/null; then
-                echo -e "${GREEN}  ---> ${C} Tesseract is installed. ${C} ${STD} Version: \n\n$(tesseract -v)"
-                echo -e "\n  ---> Location: $(which tesseract) \n"
-                echo -e "\n $(scoop info tesseract) \n"
-            else
-                echo -e "\n${RED}  ---> ${X} Error... Tesseract not found. Please run the Iris Bootstrap. ${X} ${STD}\n"
             fi
 
 

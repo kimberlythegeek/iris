@@ -10,7 +10,6 @@ from moziris.api.enums import MatchTemplateType
 from moziris.api.errors import FindError
 from moziris.api.finder.image_search import image_find, match_template, image_vanish
 from moziris.api.finder.pattern import Pattern
-from moziris.api.finder.text_search import text_find, text_find_all
 from moziris.api.highlight.screen_highlight import ScreenHighlight, HighlightRectangle
 from moziris.api.location import Location
 from moziris.api.rectangle import Rectangle
@@ -69,94 +68,62 @@ def highlight(
     time.sleep(seconds)
 
 
-def find(ps: Pattern or str, region: Rectangle = None) -> Location or FindError:
+def find(ps: Pattern, region: Rectangle = None) -> Location or FindError:
     """Look for a single match of a Pattern or image.
 
-    :param ps: Pattern or String.
+    :param ps: Pattern.
     :param region: Rectangle object in order to minimize the area.
     :return: Location object.
     """
-    if isinstance(ps, Pattern):
-        image_found = match_template(ps, region, MatchTemplateType.SINGLE)
-        if len(image_found) > 0:
-            if Settings.highlight:
-                highlight(region=region, ps=ps, location=image_found)
-            return image_found[0]
-        else:
-            raise FindError("Unable to find image %s" % ps.get_filename())
-    elif isinstance(ps, str):
-        text_found = text_find(ps, region)
-        if len(text_found) > 0:
-            if Settings.highlight:
-                highlight(region=region, ps=ps, text_location=text_found)
-            return Location(text_found[0].x, text_found[0].y)
-        else:
-            raise FindError("Unable to find text %s" % ps)
+    image_found = match_template(ps, region, MatchTemplateType.SINGLE)
+    if len(image_found) > 0:
+        if Settings.highlight:
+            highlight(region=region, ps=ps, location=image_found)
+        return image_found[0]
+    else:
+        raise FindError("Unable to find image %s" % ps.get_filename())
 
 
-def find_all(ps: Pattern or str, region: Rectangle = None):
+def find_all(ps: Pattern, region: Rectangle = None):
     """Look for all matches of a Pattern or image.
 
-    :param ps: Pattern or String.
+    :param ps: Pattern.
     :param region: Rectangle object in order to minimize the area.
     :return: Location object or FindError.
     """
-    if isinstance(ps, Pattern):
-        images_found = match_template(ps, region, MatchTemplateType.MULTIPLE)
-        if len(images_found) > 0:
-            if Settings.highlight:
-                highlight(region=region, ps=ps, location=images_found)
-            return images_found
-        else:
-            raise FindError("Unable to find image %s" % ps.get_filename())
-    elif isinstance(ps, str):
-        locations = []
-        text_found = text_find_all(ps, region)
-        if len(text_found) > 0:
-            if Settings.highlight:
-                highlight(region=region, ps=ps, text_location=text_found)
-            for text in text_found:
-                locations.append(Location(text.x, text.y))
-                return locations
-        else:
-            raise FindError("Unable to find text %s" % ps)
+    images_found = match_template(ps, region, MatchTemplateType.MULTIPLE)
+    if len(images_found) > 0:
+        if Settings.highlight:
+            highlight(region=region, ps=ps, location=images_found)
+        return images_found
+    else:
+        raise FindError("Unable to find image %s" % ps.get_filename())
 
 
 def wait(ps, timeout=None, region=None) -> bool or FindError:
-    """Verify that a Pattern or str appears.
+    """Verify that a Pattern appears.
 
-    :param ps: String or Pattern.
+    :param ps: Pattern.
     :param timeout: Number as maximum waiting time in seconds.
     :param region: Rectangle object in order to minimize the area.
     :return: True if found, otherwise raise FindError.
     """
-    if isinstance(ps, Pattern):
-        if timeout is None:
-            timeout = Settings.auto_wait_timeout
+    if timeout is None:
+        timeout = Settings.auto_wait_timeout
 
-        image_found = image_find(ps, timeout, region)
-        if image_found is not None:
-            if Settings.highlight:
-                highlight(region=region, ps=ps, location=[image_found])
-            return True
-        else:
-            raise FindError("Unable to find image %s" % ps.get_filename())
-    elif isinstance(ps, str):
-        text_found = text_find(ps, region)
-        if len(text_found) > 0:
-            if Settings.highlight:
-                highlight(region=region, ps=ps, text_location=text_found)
-            return Location(text_found[0].x, text_found[0].y)
-        else:
-            raise FindError("Unable to find text %s" % ps)
+    image_found = image_find(ps, timeout, region)
+    if image_found is not None:
+        if Settings.highlight:
+            highlight(region=region, ps=ps, location=[image_found])
+        return True
     else:
-        raise ValueError("Invalid input")
+        raise FindError("Unable to find image %s" % ps.get_filename())
 
 
-def exists(ps: Pattern or str, timeout: float = None, region: Rectangle = None) -> bool:
+def exists(ps: Pattern, timeout: float = None, region: Rectangle = None) -> bool:
     """Check if Pattern or image exists.
 
-    :param ps: String or Pattern.
+    :param ps: Pattern.
     :param timeout: Number as maximum waiting time in seconds.
     :param region: Rectangle object in order to minimize the area.
     :return: True if found.

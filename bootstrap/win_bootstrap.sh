@@ -6,10 +6,6 @@ GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 CWD=$(powershell -Command "(Get-Location).Path")
 
-install_tesseract () {
-    powershell -Command "scoop install "${CWD}"\bootstrap\tesseract.json"
-}
-
 echo -e "\n${RED}##### Starting Windows bootstrap #####${NC}\n"
 
 echo -e "${GREEN}  --->  Installing Scoop package management #####${NC}\n"
@@ -79,21 +75,6 @@ else
     powershell -Command "scoop install sudo"
 fi
 
-echo -e "\n${GREEN} --->  Installing Tesseract 4 ${NC} \n"
-if command -v tesseract &>/dev/null; then
-    echo -e "${GREEN}  --->  Tesseract already installed. ${NC}\n"
-    echo -e "${GREEN}    --->  Checking Tesseract version. ${NC}\n"
-    if [[ $(tesseract -v | grep "tesseract 3.05") =~ 3 ]]; then
-        echo -e "${RED}  --->  You have Tesseract 3, removing and installing Tesseract 4.${NC}\n"
-        powershell -Command "scoop uninstall tesseract" # If Scoop does not recognize tesseract3 command
-        powershell -Command "scoop uninstall tesseract3"
-        install_tesseract
-    else
-        echo -e "${GREEN}    --->  Tesseract is the correct version. ${NC}\n"
-    fi
-else
-    install_tesseract
-fi
 
 echo -e "\n${GREEN}  --->  installing/updating Python 3.7 #####${NC}\n"
 if command -v python3 &>/dev/null; then

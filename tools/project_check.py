@@ -20,7 +20,6 @@ try:
     import mozinfo
     import mozversion
     import pyautogui
-    import pytesseract
     import mss
     import cv2
     import os
@@ -179,23 +178,3 @@ else:
     print("Version: " + mss.__version__)
     print("")
     print(bcolors.BOLD + bcolors.OKGREEN + "MSS working correctly." + bcolors.ENDC)
-
-
-print(
-    "_____________________________________________________________________________________"
-)
-print("")
-print(bcolors.OKBLUE + "Testing Pytesseract" + bcolors.ENDC)
-print("")
-
-try:
-    print("pytesseract.get_tesseract_version()")
-    print(pytesseract.get_tesseract_version())
-except (IOError, OSError) as e:
-    print(bcolors.FAIL + "ERROR" + bcolors.ENDC)
-    print(e)
-else:
-    print("")
-    print(
-        bcolors.BOLD + bcolors.OKGREEN + "Pytesseract working correctly." + bcolors.ENDC
-    )

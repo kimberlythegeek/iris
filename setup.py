@@ -31,7 +31,6 @@ INSTALL_REQUIRES = [
     "pygithub==1.43.8",
     "pynput==1.4.2",
     "pyperclip==1.7.0",
-    "pytesseract==0.3.0",
     "pytest==5.1.2",
     "python-dateutil==2.8.0",
 ]

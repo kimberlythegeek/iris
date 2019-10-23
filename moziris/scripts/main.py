@@ -31,7 +31,6 @@ from moziris.util.path_manager import PathManager
 from moziris.util.system import (
     check_7zip,
     fix_terminal_encoding,
-    init_tesseract_path,
     reset_terminal_encoding,
 )
 from moziris.util.target_loader import collect_tests, get_target, path_warning
@@ -52,8 +51,8 @@ def main():
             try:
                 init_control_center()
             except FileNotFoundError:
-                path_warning('Control Center assets')
-                exit_iris('', status=1)
+                path_warning("Control Center assets")
+                exit_iris("", status=1)
             user_result = launch_control_center()
             logger.debug(user_result)
             if user_result != "cancel":
@@ -161,11 +160,9 @@ def get_test_params():
 
 
 def verify_config(args):
-    """Checks keyboard state is correct, and that Tesseract and 7zip are installed."""
+    """Checks keyboard state is correct, and 7zip is installed."""
     try:
-        if not all(
-            [check_keyboard_state(args.no_check), init_tesseract_path(), check_7zip()]
-        ):
+        if not all([check_keyboard_state(args.no_check), check_7zip()]):
             exit_iris("Failed platform check, closing Iris.", status=1)
     except KeyboardInterrupt as e:
         exit_iris(e, status=1)
@@ -193,7 +190,9 @@ def init_control_center():
         [dirs.remove(d) for d in list(dirs) if d in exclude_dirs]
         for target in dirs:
             src = os.path.join(targets_dir, target, "icon.png")
-            dest = os.path.join(PathManager.get_working_dir(), "images", "%s.png" % target)
+            dest = os.path.join(
+                PathManager.get_working_dir(), "images", "%s.png" % target
+            )
             try:
                 shutil.copyfile(src, dest)
             except FileNotFoundError:
@@ -232,7 +231,9 @@ def launch_control_center():
             binary=fx_path, profile=profile, cmdargs=args, process_args=process_args
         )
         fx_runner.start()
-    logger.debug("Launching web server for directory %s" % PathManager.get_working_dir())
+    logger.debug(
+        "Launching web server for directory %s" % PathManager.get_working_dir()
+    )
     server = LocalWebServer(PathManager.get_working_dir(), get_core_args().port)
     server.stop()
     time.sleep(Settings.DEFAULT_UI_DELAY)
@@ -266,43 +267,43 @@ def launch_control_center():
 def get_fx_prefs():
     prefs = {
         # Don't automatically update the application
-        'app.update.disabledForTesting': True,
+        "app.update.disabledForTesting": True,
         # Don't restore the last open set of tabs if the browser has crashed
-        'browser.sessionstore.resume_from_crash': False,
+        "browser.sessionstore.resume_from_crash": False,
         # Don't check for the default web browser during startup
-        'browser.shell.checkDefaultBrowser': False,
+        "browser.shell.checkDefaultBrowser": False,
         # Don't warn on exit when multiple tabs are open
-        'browser.tabs.warnOnClose': False,
+        "browser.tabs.warnOnClose": False,
         # Don't warn when exiting the browser
-        'browser.warnOnQuit': False,
+        "browser.warnOnQuit": False,
         # Don't send Firefox health reports to the production server
-        'datareporting.healthreport.documentServerURI': 'http://%(server)s/healthreport/',
+        "datareporting.healthreport.documentServerURI": "http://%(server)s/healthreport/",
         # Skip data reporting policy notifications
-        'datareporting.policy.dataSubmissionPolicyBypassNotification': False,
+        "datareporting.policy.dataSubmissionPolicyBypassNotification": False,
         # Only install add-ons from the profile and the application scope
         # Also ensure that those are not getting disabled.
         # see: https://developer.mozilla.org/en/Installing_extensions
-        'extensions.enabledScopes': 5,
-        'extensions.autoDisableScopes': 10,
+        "extensions.enabledScopes": 5,
+        "extensions.autoDisableScopes": 10,
         # Don't send the list of installed addons to AMO
-        'extensions.getAddons.cache.enabled': False,
+        "extensions.getAddons.cache.enabled": False,
         # Don't install distribution add-ons from the app folder
-        'extensions.installDistroAddons': False,
+        "extensions.installDistroAddons": False,
         # Don't automatically update add-ons
-        'extensions.update.enabled': False,
+        "extensions.update.enabled": False,
         # Don't open a dialog to show available add-on updates
-        'extensions.update.notifyUser': False,
+        "extensions.update.notifyUser": False,
         # Enable test mode to run multiple tests in parallel
-        'focusmanager.testmode': True,
+        "focusmanager.testmode": True,
         # Enable test mode to not raise an OS level dialog for location sharing
-        'geo.provider.testing': True,
+        "geo.provider.testing": True,
         # Suppress delay for main action in popup notifications
-        'security.notification_enable_delay': 0,
+        "security.notification_enable_delay": 0,
         # Suppress automatic safe mode after crashes
-        'toolkit.startup.max_resumed_crashes': -1,
+        "toolkit.startup.max_resumed_crashes": -1,
         # Don't send Telemetry reports to the production server. This is
         # needed as Telemetry sends pings also if FHR upload is enabled.
-        'toolkit.telemetry.server': 'http://%(server)s/telemetry-dummy/',
+        "toolkit.telemetry.server": "http://%(server)s/telemetry-dummy/",
     }
     return prefs
 

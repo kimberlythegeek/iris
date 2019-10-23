@@ -8,8 +8,6 @@ import os
 import subprocess
 from distutils.spawn import find_executable
 
-import pytesseract
-
 from moziris.api.os_helpers import OSHelper
 
 logger = logging.getLogger(__name__)
@@ -21,51 +19,6 @@ def check_7zip():
     sz_bin = find_executable("7z")
     if sz_bin is None:
         logger.critical("Cannot find required library 7zip, aborting Iris.")
-        logger.critical("Please consult wiki for complete setup instructions.")
-        return False
-    return True
-
-
-def init_tesseract_path():
-    """Initialize Tesseract path."""
-
-    which_tesseract = (
-        subprocess.Popen("which tesseract", stdout=subprocess.PIPE, shell=True)
-        .communicate()[0]
-        .rstrip()
-        .decode("utf-8")
-    )
-    path_not_found = False
-
-    if OSHelper.is_windows():
-        win_default_tesseract_path = "C:\\Program Files (x86)\\Tesseract-OCR"
-
-        if "/c/" in str(which_tesseract):
-            win_which_tesseract_path = (
-                which_tesseract.replace("/c/", "C:\\").replace("/", "\\") + ".exe"
-            )
-        else:
-            win_which_tesseract_path = which_tesseract.replace("\\", "\\\\")
-
-        if _check_path(win_default_tesseract_path):
-            pytesseract.pytesseract.tesseract_cmd = (
-                win_default_tesseract_path + "\\tesseract"
-            )
-        elif _check_path(win_which_tesseract_path):
-            pytesseract.pytesseract.tesseract_cmd = win_which_tesseract_path
-        else:
-            path_not_found = True
-
-    elif OSHelper.is_linux() or OSHelper.is_mac():
-        if _check_path(which_tesseract):
-            pytesseract.pytesseract.tesseract_cmd = which_tesseract
-        else:
-            path_not_found = True
-    else:
-        path_not_found = True
-
-    if path_not_found:
-        logger.critical("Unable to find Tesseract.")
         logger.critical("Please consult wiki for complete setup instructions.")
         return False
     return True

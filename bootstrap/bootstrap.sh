@@ -44,7 +44,7 @@ else
   echo -e "${CYAN} Bootstrapping for Windows OS ${NC} \n"
   echo -e "${RED}Administrator password required!${NC} \n"
   echo -e "\n${RED}The following applications will be installed on your system:${NC}"
-  echo -e "\nScoop package management\n7zip\nopenssh\ngit\nfirefox\nwhich\nsudo\ntesseract\npython3.7\n"
+  echo -e "\nScoop package management\n7zip\nopenssh\ngit\nfirefox\nwhich\nsudo\npython3.7\n"
   read -p "Do you wish to continue? (y)es/(n)o " -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]
