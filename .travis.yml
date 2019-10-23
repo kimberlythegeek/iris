@@ -4,7 +4,6 @@ python: '3.7.3'
 
 # Bootstrap install
 install:
-  - 'bootstrap/linux_bootstrap.sh'
   - 'pipenv install'
 
 # Virtual display for headless run at 1920x1080 32 bit resolution
@@ -19,14 +18,19 @@ with_content_shell: true
 jobs:
   include:
     - stage: Lint
-      before_install: skip
       before_script: skip
       install: pip install tox
       script: tox -e flake8
-    - stage: Ubuntu 16.04 Image search and mouse movement tests
-      os: linux
-      dist: xenial
-      script: pipenv run iris -h
+    - stage: Smoke Tests
+      before_script: skip
+      install: skip
+      script:
+        - tox -e default_config
+        - tox -e custom_config
+    # - stage: Ubuntu 16.04 Image search and mouse movement tests
+    #   os: linux
+    #   dist: xenial
+    #   script: pipenv run iris -h
 
 # Email notification
 notifications:
