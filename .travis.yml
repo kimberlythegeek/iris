@@ -2,9 +2,7 @@ sudo: required
 language: python
 python: '3.7.3'
 
-# Bootstrap install
-install:
-  - 'pipenv install'
+install: pip install tox
 
 # Virtual display for headless run at 1920x1080 32 bit resolution
 before_script:
@@ -19,11 +17,9 @@ jobs:
   include:
     - stage: Lint
       before_script: skip
-      install: pip install tox
       script: tox -e flake8
     - stage: Smoke Tests
       before_script: skip
-      install: skip
       script:
         - tox -e default_config
         - tox -e custom_config
