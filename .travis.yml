@@ -21,7 +21,7 @@ jobs:
       before_script: skip
       install: pip install tox
       script: tox -e flake8
-    - stage: Smoke Tests
+    - stage: Unit Tests
       install: pip install tox
       script:
         - tox -e default_config
