@@ -158,5 +158,5 @@ class KeyModifier(Enum):
     CMD = Key.CMD
     WIN = Key.WIN
     META = Key.META
-    SUPER = Key.Super
+    SUPER = Key.SUPER
     ALT = Key.ALT
