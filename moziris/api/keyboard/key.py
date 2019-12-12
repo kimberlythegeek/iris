@@ -10,9 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class KeyCode:
-    def __init__(
-        self, label: str, value=None, x11key: str = None, reserved: bool = True
-    ):
+    def __init__(self, label: str, value=None, x11key: str = None, reserved: bool = True):
         self.label = label
         self.value = value
         self.x11key = x11key
@@ -78,6 +76,7 @@ class Key(Enum):
     SEPARATOR = KeyCode("separator", None, "KP_Separator")
     SHIFT = KeyCode("shift", 1 << 0, "Shift_L")
     SPACE = KeyCode(" ", None, "space")
+    SUPER = KeyCode("linuxsuper", None, "Super")
     TAB = KeyCode("\t", None, "Tab")
     UP = KeyCode("up", None, "Up")
     WIN = KeyCode("win", 1 << 2)
@@ -159,4 +158,5 @@ class KeyModifier(Enum):
     CMD = Key.CMD
     WIN = Key.WIN
     META = Key.META
+    SUPER = Key.Super
     ALT = Key.ALT
